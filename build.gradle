@@ -1,0 +1,103 @@
+/*
+ * Arquivo auto-gerado pela task 'gradle init' com Gradle 2.7
+ *
+ * @author: marcela.oliveira
+ */
+
+apply plugin: 'eclipse-wtp'
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Identificação do war
+war {
+  baseName = 'ExemploTriplo'
+}
+
+// Declaração de onde as dependências serão baixadas
+repositories {
+  // utiliza o artifactory para baixar dependências
+  jcenter();
+}
+
+// Seção de declaração das dependências do código de produção e teste
+dependencies {
+
+  compile 'org.slf4j:slf4j-api:1.7.12'
+  compile 'org.slf4j:slf4j-simple:1.7.12'
+
+  compile 'com.google.guava:guava:18.0'
+  
+  // Entity manager
+  compile 'org.hibernate:hibernate-entitymanager:5.0.2.Final'
+
+  // Primefaces
+  compile 'org.primefaces:primefaces:5.3'
+
+  // Postgresql
+  compile 'org.postgresql:postgresql:9.4-1204-jdbc42'
+
+  // JSF
+  compile 'com.sun.faces:jsf-api:2.2.12'
+  compile 'com.sun.faces:jsf-impl:2.2.12'
+  
+  // Spring Security
+  // compile 'org.springframework.security:spring-security-web:4.0.2.RELEASE'
+  // compile 'org.springframework.security:spring-security-config:4.0.2.RELEASE'
+
+  // Código de produção usa log SLF4J em tempo de compilação
+  compile 'jstl:jstl:1.2'
+
+  // JPA
+  compile 'org.hibernate:hibernate-core:5.0.2.Final'
+  
+  compile 'org.jboss.weld.servlet:weld-servlet-core:2.3.1.Final'
+  
+  compile 'org.jboss.weld:weld-core:2.3.1.Final'
+  
+  // compile 'org.hibernate:hibernate-c3p0:5.0.2.Final'
+
+  // Junit
+  testCompile 'junit:junit:4.12'
+
+  //compile 'org.jboss.weld.se:weld-se:2.3.1.Final'
+  compile 'org.apache.tomcat:tomcat-servlet-api:8.0.28'
+  
+  compile 'org.jglue.cdi-unit:cdi-unit:3.1.3'
+  
+  
+}
+
+// Configurações do eclipse
+eclipse{
+  project {
+    natures 'org.springsource.ide.eclipse.gradle.core.nature'
+  }
+  classpath {
+    containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+    containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    downloadSources = true
+  }
+}
+
+// Adiciona informações pertinentes a configuração do eclipse
+eclipseJdt << {
+  File f = file('.settings/org.eclipse.core.resources.prefs')
+  f.write('eclipse.preferences.version=1\n')
+  f.append('encoding/<project>=utf-8')
+}
+
+// Configuração que permite que o código fonte das bibliotecas sejam visualizados
+eclipse.classpath.file {
+  withXml { xml ->
+      def node = xml.asNode()
+      node.remove( node.find { it.@path == 'org.eclipse.jst.j2ee.internal.web.container' } )
+      node.appendNode( 'classpathentry', [ kind: 'con', path: 'org.eclipse.jst.j2ee.internal.web.container', exported: 'true'])
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.12'
+}

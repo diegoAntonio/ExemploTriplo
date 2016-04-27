@@ -1,0 +1,19 @@
+# Project configuration
+/bin
+build
+.project
+.gradle
+
+# Eclipse configuration
+.classpath
+.project
+.settings
+.checkstyle
+/WEB-INF
+/src/main/resources/META-INF/persistence.xml 
+
+# Text editors
+*.swp
+*.orig
+*.directory
+*.~lock*

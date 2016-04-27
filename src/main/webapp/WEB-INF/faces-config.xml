@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+    version="2.2">
+
+    <application>
+		<resource-bundle>
+			<base-name>messages.messages</base-name>
+			<var>msg</var>
+	   	</resource-bundle>
+    </application>
+
+	<navigation-rule>
+        <from-view-id>/*</from-view-id>
+        <navigation-case>
+            <from-action>#{loginBean.acaoLogout}</from-action>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+
+        <navigation-case>
+            <from-action>#{loginBean.acaoAlterarSenha}</from-action>
+            <from-outcome>alterarSenha</from-outcome>
+            <to-view-id>/alterar-senha/alterar.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/admin/gerar-lista.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{gerarListaBean.acaoProximo}</from-action>
+            <from-outcome>telaConfirmacaoGerarLista</from-outcome>
+            <to-view-id>/admin/gerar-lista-confirmacao.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/painel-comparecimento/painel-comparecimento-filtro.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{painelComparecimentoBean.acaoContinuar}</from-action>
+            <from-outcome>exibirPainel</from-outcome>
+            <to-view-id>/painel-comparecimento/painel-comparecimento.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/admin/convocacao/preparar-filtro.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{prepararConvocacaoBean.acaoBotaoContinuar}</from-action>
+            <from-outcome>exibirPainelConvocacao</from-outcome>
+            <to-view-id>/admin/convocacao/preparar-painel.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+
+   <navigation-rule>
+        <from-view-id>/painel-ocupacao/filtro.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{painelOcupacaoBean.acaoBotaoContinuar}</from-action>
+            <from-outcome>exibirPainel</from-outcome>
+            <to-view-id>/painel-ocupacao/painel.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>
