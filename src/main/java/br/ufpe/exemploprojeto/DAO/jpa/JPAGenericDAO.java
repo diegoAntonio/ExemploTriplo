@@ -3,59 +3,79 @@ package br.ufpe.exemploprojeto.DAO.jpa;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 
 import br.ufpe.exemploprojeto.DAO.GenericDAO;
-import br.ufpe.exemploprojeto.annotation.Transacao;
 
-@SuppressWarnings("unchecked")
-@ApplicationScoped
-public abstract class JPAGenericDAO<Entidade> implements GenericDAO<Entidade> {
-	private static final long serialVersionUID = 7457619441441316503L;
-	
+/**
+ * Classe de repositorio com implementacao em JPA 
+ * basica para as entidades do sistema.
+ * 
+ * @author andre.alcantara
+ *
+ * @param <Chave> - Chave da Entidade
+ * @param <Entidade> - Entidade que sera persistida.
+ */
+public class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave, Entidade> {
+
+	private static final long serialVersionUID = -5270442135567484490L;
+
 	@Inject
 	protected EntityManager em;
-	
+
+	private Class<Entidade> entidadeClass;
+
+	/**
+	 * Inicia atributos na classe.
+	 */
+	@SuppressWarnings("unchecked")
+	@PostConstruct
+	public void init() {
+		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
+		this.entidadeClass = (Class<Entidade>) genericSuperclass.getActualTypeArguments()[1];
+	}
 
 	@Override
-	@Transacao
-	public Entidade inserir(Entidade entity){
-		em.persist(entity);
-		return entity;
+	public Entidade save(final Entidade e) {
+		em.persist(e);
+		return e;
 	}
-	
 
 	@Override
-	@Transacao
-	public Entidade alterar(Entidade entity){
-		em.merge(entity);
-		return entity;
+	public Entidade update(Entidade e) {
+			em.merge(e);
+
+		return e;
 	}
-	
 
 	@Override
-	@Transacao
-	public void remover(Entidade entity){
-		em.remove(entity);
+	public void refresh(Entidade e) {
+		em.refresh(e);
 	}
-	
 
 	@Override
-	public Entidade buscaPorId(Long id){
-		return (Entidade) em.find(getTypeClass(), id);
+	public void remove(final Entidade e) {
+		em.remove(em.merge(e));
 	}
-	
 
 	@Override
-	public List<Entidade> listaTodos(){
-		return em.createQuery(("FROM "+getTypeClass().getName())).getResultList();
+	public Entidade findById(final Chave id) {
+		Entidade e = em.find(this.entidadeClass, id);
+		return e;
+	}
+
+	@Override
+	public List<Entidade> findAll() {
+		CriteriaQuery<Entidade> query = em.getCriteriaBuilder().createQuery(entidadeClass);
+		query.from(entidadeClass);
+		List<Entidade> list = em.createQuery(query).getResultList();
+		return list;
 	}
 	
-	private Class<Entidade> getTypeClass() {
-        Class<Entidade> clazz = (Class<Entidade>) ((ParameterizedType) this.getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0];
-        return clazz;
-    }	
+	public Class<Entidade> getEntidadeClass(){
+		return this.entidadeClass;
+	}
 }

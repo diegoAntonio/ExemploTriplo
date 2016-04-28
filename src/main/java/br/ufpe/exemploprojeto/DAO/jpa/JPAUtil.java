@@ -22,11 +22,21 @@ public class JPAUtil {
 	
 	
 	/**
+	 * Fecha um EntityManger assim que seu escopo acabar
+	 * @param EManager - {@link EntityManager}
+	 */
+	public static void fecharEntityManager(EntityManager EManager){
+		if(EManager != null && EManager.isOpen()){
+			EManager.close();
+		}
+	}
+	
+	/**
 	 * Cria um {@link EntityManagerFactory} assim que eh solicitado.
 	 * @return {@link EntityManagerFactory} 
 	 */
 	@Produces @ApplicationScoped
-	public EntityManagerFactory createEntityManagerFactory(){
+	private EntityManagerFactory createEntityManagerFactory(){
 		Properties props = new Properties();
 		try {
 			props.load(JPAUtil.class.getClassLoader().getResourceAsStream(PROPERTIES_NAME));
@@ -43,7 +53,7 @@ public class JPAUtil {
 	 * @return {@link EntityManager} 
 	 */
 	@Produces @RequestScoped
-	public EntityManager createEntityManager(EntityManagerFactory factory){
+	private EntityManager createEntityManager(EntityManagerFactory factory){
 		return factory.createEntityManager();
 	}
 	
@@ -51,12 +61,10 @@ public class JPAUtil {
 	 * Fecha um EntityManger assim que seu escopo acabar
 	 * @param EManager - {@link EntityManager}
 	 */
-	public void destroyerEntityManager(@Disposes EntityManager EManager){
-		if(EManager != null && EManager.isOpen()){
-			EManager.close();
-		}
+	@SuppressWarnings("unused")
+	private void destroyerEntityManager(@Disposes EntityManager EManager){
+		JPAUtil.fecharEntityManager(EManager);
 	}
-	
 	
 	/**
 	 * Fecha a fabrica de EntityManager. Vai ser usado quando fizer Testes unitarios.

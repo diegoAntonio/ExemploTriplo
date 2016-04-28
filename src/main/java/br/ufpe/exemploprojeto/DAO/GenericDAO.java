@@ -3,16 +3,54 @@ package br.ufpe.exemploprojeto.DAO;
 import java.io.Serializable;
 import java.util.List;
 
-public interface GenericDAO<Entidade> extends Serializable {
+/**
+ * 
+ * Classe de repositorio com implementacao em JPA 
+ * basica para as entidades do sistema.
+ * 
+ * @author andre.alcantara
+ *
+ * @param <Chave> - Chave da Entidade
+ * @param <Entidade> - Entidade que sera persistida.
+ */
+public interface GenericDAO<Chave, Entidade>  extends Serializable {
 
-	Entidade inserir(Entidade entity);
+	/**
+	 * Persiste uma entidade.
+	 * @param e - entidade
+	 * @return Entidade persistida com id atualizado.
+	 */
+	public Entidade save(Entidade e);
 
-	Entidade alterar(Entidade entity);
+	/**
+	 * Atualiza entidade
+	 * @param e - entidade atualizada.
+	 * @return Entidade atualizada. 
+	 */
+	public Entidade update(Entidade e);
 
-	void remover(Entidade entity);
+	/**
+	 * Remove uma entidade.
+	 * @param e - entidade que será removida.
+	 */
+	public void remove(Entidade e);
+	
+	/**
+	 * Atualiza a entidade com as informacoes do banco.
+	 * @param e - entidade que será atualizada com as informacoes do banco.
+	 */
+	public void refresh(Entidade e);
 
-	Entidade buscaPorId(Long id);
-
-	List<Entidade> listaTodos();
-
+	/**
+	 * Busca uma entidade por uma chave.
+	 * @param id - chave da entidade
+	 * @return entidade encontrada no banco.
+	 */
+	public Entidade findById(Chave id);
+	
+	/**
+	 * Retorna uma {@link List} com todas as entidades do banco.
+	 * @return {@link List} de entidades.
+	 */
+	public List<Entidade> findAll();
 }

@@ -1,5 +1,6 @@
 package br.ufpe.exemploprojeto.model;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
@@ -24,9 +25,11 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "usuario")
 @SequenceGenerator(name = "seq_usuario", sequenceName = "usuario_id_seq", allocationSize = 1)
-public class Usuario {
+public class Usuario implements Serializable {
+	private static final long serialVersionUID = 1079619057493715949L;
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usuario")
 	private long id;
 	
 	private String nome;
