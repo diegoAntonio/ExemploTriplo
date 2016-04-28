@@ -1,4 +1,5 @@
-### Projeto de Exemplo para Weld TDD e SpringSecurity Sisu
+### Projeto de Exemplo para os assuntos de CDI(Weld), TDD e SpringSecurity 
+### aprendidos durante o projeto do Sisu
 ----
 Sistema para exemplificar o estudado durante o treinamento
 
@@ -20,7 +21,7 @@ Sistema para exemplificar o estudado durante o treinamento
 ----
 1. Clonar repositório:
 ```
-$[localhost git] git clone git@gitlab.ufpe.br:sisu/sisu.git
+$[localhost git] git clone git@github.com:andrealcantara/ExemploTriplo.git
 ```
 2. Criar arquivos de configuração da IDE Eclipse:
 ```
