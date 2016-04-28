@@ -25,7 +25,6 @@ public class TransacaoInterceptor {
 			if(countCommit.ehZero()){
 				em.getTransaction().begin();
 			}
-			System.out.println("Entrou");
 			countCommit.incrementarCommit();
 			retorno = ctx.proceed();
 			countCommit.decrementarCommit();
@@ -38,8 +37,6 @@ public class TransacaoInterceptor {
 			em.getTransaction().rollback();
 			throw e;
 		}
-
-		System.out.println("saiu");
-		return retorno;
+		return retorno;	
 	}
 }

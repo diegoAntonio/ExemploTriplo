@@ -24,7 +24,7 @@ import br.ufpe.exemploprojeto.annotation.interceptador.TransacaoInterceptor;
  *
  */
 @RunWith(CdiRunner.class)
-@AdditionalClasses(value = { TransacaoInterceptor.class })
+@AdditionalClasses(value = { TransacaoInterceptor.class})
 @AdditionalPackages(value = { JPAUtil.class })
 @InRequestScope
 public abstract class ExemploTestEnv {

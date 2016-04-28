@@ -18,8 +18,7 @@ war {
 
 // Declaração de onde as dependências serão baixadas
 repositories {
-  // utiliza o artifactory para baixar dependências
-  jcenter();
+	jcenter();
 }
 
 // Seção de declaração das dependências do código de produção e teste
@@ -29,9 +28,6 @@ dependencies {
   compile 'org.slf4j:slf4j-simple:1.7.12'  
 
   compile 'com.google.guava:guava:18.0'
-  
-  // Entity manager
-  compile 'org.hibernate:hibernate-entitymanager:5.0.2.Final'
 
   // Primefaces
   compile 'org.primefaces:primefaces:5.3'
@@ -52,19 +48,16 @@ dependencies {
 
   // JPA
   compile 'org.hibernate:hibernate-core:5.0.2.Final'
+  compile 'org.hibernate:hibernate-entitymanager:5.0.2.Final'
   
+  //CDI (Weld)
   compile 'org.jboss.weld.servlet:weld-servlet-core:2.3.1.Final'
-  
   compile 'org.jboss.weld:weld-core:2.3.1.Final'
   
-  // compile 'org.hibernate:hibernate-c3p0:5.0.2.Final'
-
   // Junit
   testCompile 'junit:junit:4.12'
-
-  //compile 'org.jboss.weld.se:weld-se:2.3.1.Final'
-  compile 'org.apache.tomcat:tomcat-servlet-api:8.0.28'
   
+  compile 'org.apache.tomcat:tomcat-servlet-api:8.0.28'  
   compile 'org.jglue.cdi-unit:cdi-unit:3.1.3'
   
   

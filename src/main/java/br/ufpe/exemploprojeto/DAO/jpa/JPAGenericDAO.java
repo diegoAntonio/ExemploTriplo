@@ -1,6 +1,7 @@
 package br.ufpe.exemploprojeto.DAO.jpa;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -9,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
 import br.ufpe.exemploprojeto.DAO.GenericDAO;
+import br.ufpe.exemploprojeto.annotation.Transacao;
 
 /**
  * Classe de repositorio com implementacao em JPA 
@@ -19,7 +21,7 @@ import br.ufpe.exemploprojeto.DAO.GenericDAO;
  * @param <Chave> - Chave da Entidade
  * @param <Entidade> - Entidade que sera persistida.
  */
-public class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave, Entidade> {
+public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave, Entidade> {
 
 	private static final long serialVersionUID = -5270442135567484490L;
 
@@ -28,26 +30,17 @@ public class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave, Entidad
 
 	private Class<Entidade> entidadeClass;
 
-	/**
-	 * Inicia atributos na classe.
-	 */
-	@SuppressWarnings("unchecked")
-	@PostConstruct
-	public void init() {
-		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-		this.entidadeClass = (Class<Entidade>) genericSuperclass.getActualTypeArguments()[1];
-	}
-
 	@Override
+	@Transacao
 	public Entidade save(final Entidade e) {
 		em.persist(e);
 		return e;
 	}
 
 	@Override
+	@Transacao
 	public Entidade update(Entidade e) {
-			em.merge(e);
-
+		em.merge(e);
 		return e;
 	}
 
@@ -57,6 +50,7 @@ public class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave, Entidad
 	}
 
 	@Override
+	@Transacao
 	public void remove(final Entidade e) {
 		em.remove(em.merge(e));
 	}
@@ -77,5 +71,22 @@ public class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave, Entidad
 	
 	public Class<Entidade> getEntidadeClass(){
 		return this.entidadeClass;
+	}
+	
+	/**
+	 * Inicia atributos na classe.
+	 */
+	@PostConstruct
+	public void init() {
+		Type genericSuperClass = getClass().getGenericSuperclass();
+		ParameterizedType parametrizedType;
+		if (genericSuperClass instanceof ParameterizedType) { // Classe normal.
+		    parametrizedType = (ParameterizedType) genericSuperClass;
+		} else if (genericSuperClass instanceof Class) { // Em caso de uso de Proxy.
+		    parametrizedType = (ParameterizedType) ((Class<Entidade>) genericSuperClass).getGenericSuperclass();
+		} else {
+		    throw new IllegalStateException("class " + getClass() + " is not subtype of ParametrizedType.");
+		}
+		this.entidadeClass = (Class<Entidade>) parametrizedType.getActualTypeArguments()[1];
 	}
 }
