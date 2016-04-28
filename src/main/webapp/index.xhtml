@@ -1,48 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-
-<ui:decorate template="/template/principal.xhtml">
-	<ui:define name="conteudo">
-	<h:panelGroup layout="block" id="panelProcesso" styleClass="conteudo">
-		<h:outputText value="Etapas do Processo" styleClass="lead" />
-	
-		<h:form id="painel_processo">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		
-			<h:panelGrid columns="2">
-				<p:dataList value="#{painelProcessoBean.etapas}" var="etapa" type="unordered" itemType="none">
-					<h:graphicImage library="img" name="#{painelProcessoBean.mapaEstados[etapa]}" height="20"/>
-					<p:spacer width="5"  />
-					<h:outputText value="#{etapa.nome}" />
-				</p:dataList>
-			</h:panelGrid>
-			
-			<p:spacer/>
-			<h:panelGroup layout="block" id="legenda">
-				<h:outputLabel value="Legenda:"/>
-				<h:panelGrid columns="2" cellspacing="5">
-					<h:graphicImage library="img" name="icon/realizado.png" height="20"/>
-					<h:outputText value="Etapa Concluída" />
-
-					<h:graphicImage library="img" name="icon/em_andamento.png" height="20"/>
-					<h:outputText value="Etapa em Andamento" />
-					
-					<h:graphicImage library="img" name="icon/proxima_etapa.png" height="20"/>
-					<h:outputText value="Próxima Etapa" />
-					
-					
-					<h:graphicImage library="img" name="icon/nao_realizado.png" height="20"/>
-					<h:outputText value="Pendente" />
-				</h:panelGrid> 
-			</h:panelGroup>
-		</h:form>
-		
-	</h:panelGroup>
-	</ui:define>
-</ui:decorate>
-
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</h:head>
+<h:body>
+	<h:outputText value="Go"/>
+</h:body>
 </html>
