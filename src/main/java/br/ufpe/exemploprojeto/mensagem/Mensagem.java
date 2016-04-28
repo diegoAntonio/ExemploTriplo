@@ -14,10 +14,6 @@ public class Mensagem {
 		return MessageFormat.format(rb.getString(msg.getMensagemKey()), params);
 	}
 	
-	private static class MensagemHolder{
-		private static final ResourceBundle HOLDER = ResourceBundle.getBundle("mensagem");
-	}
-	
 	public enum MensagemEnum{
 		Mensagem_Error_Enum_Param("mensagemErrorEnumParam");
 		
@@ -30,5 +26,9 @@ public class Mensagem {
 		private String getMensagemKey(){
 			return resourceMensagem;
 		}
+	}
+	
+	private static class MensagemHolder{
+		private static final ResourceBundle HOLDER = ResourceBundle.getBundle("mensagem");
 	}
 }

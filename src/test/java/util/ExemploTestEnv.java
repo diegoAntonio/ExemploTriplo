@@ -39,8 +39,15 @@ public abstract class ExemploTestEnv {
 	
 	@Before
 	public void antesDeCadaTeste(){
-		resetBanco();
+		if(precisaResetarBanco()){
+			resetBanco();
+		}
 	}
+	
+	public boolean precisaResetarBanco(){
+		return true;
+	}
+	
 	
 	private void resetBanco() {
 		EntityManager EManager = entityManagerFactory.createEntityManager();
