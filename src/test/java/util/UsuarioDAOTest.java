@@ -7,7 +7,6 @@ import javax.inject.Inject;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import br.ufpe.exemploprojeto.DAO.UsuarioDAO;
@@ -30,10 +29,4 @@ public class UsuarioDAOTest extends ExemploTestEnv {
 		Assert.assertThat(u1, CoreMatchers.is(u));
 	}
 	
-	@Ignore
-	@Test
-	public void teste2(){
-		//Nao fazer Nada.
-		Assert.assertThat(1, CoreMatchers.is(1));
-	}
 }

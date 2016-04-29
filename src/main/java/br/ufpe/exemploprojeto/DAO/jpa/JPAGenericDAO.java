@@ -1,10 +1,8 @@
 package br.ufpe.exemploprojeto.DAO.jpa;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
+import java.util.function.Function;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,9 +25,14 @@ public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave
 
 	@Inject
 	protected EntityManager em;
+	
 
 	private Class<Entidade> entidadeClass;
 
+	public JPAGenericDAO(Class<Entidade> e) {
+		this.entidadeClass = e;
+	}
+	
 	@Override
 	@Transacao
 	public Entidade save(final Entidade e) {
@@ -73,20 +76,13 @@ public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave
 		return this.entidadeClass;
 	}
 	
-	/**
-	 * Inicia atributos na classe.
-	 */
-	@PostConstruct
-	public void init() {
-		Type genericSuperClass = getClass().getGenericSuperclass();
-		ParameterizedType parametrizedType;
-		if (genericSuperClass instanceof ParameterizedType) { // Classe normal.
-		    parametrizedType = (ParameterizedType) genericSuperClass;
-		} else if (genericSuperClass instanceof Class) { // Em caso de uso de Proxy.
-		    parametrizedType = (ParameterizedType) ((Class<Entidade>) genericSuperClass).getGenericSuperclass();
-		} else {
-		    throw new IllegalStateException("class " + getClass() + " is not subtype of ParametrizedType.");
+	protected Entidade usingEntityManger(Function<EntityManager, Entidade> funcao){
+		Entidade entidade = null;
+		try{
+			entidade = funcao.apply(em);
+		} catch(Throwable e) {
+			throw new RuntimeException(e);
 		}
-		this.entidadeClass = (Class<Entidade>) parametrizedType.getActualTypeArguments()[1];
+		return entidade;
 	}
 }

@@ -3,8 +3,12 @@ package br.ufpe.exemploprojeto.annotation.interceptador.helper;
 import javax.enterprise.context.RequestScoped;
 
 /**
- * Solução proposta por Hially
+ * Classe eh um contador.
+ * E usada quando as trasancoes de metodos sao abertas.
+ * Para evitar iniciar uma transacao(entityManager.getTransaction().begin()) quando ela ja estiver aberta.
+ * E evitar fechar uma transacao(entityManager.getTransaction().commit()) quando ela ja estiver fechada.
  * 
+ * Solução proposta por Hially
  * @author andre.alcantara
  *
  */
