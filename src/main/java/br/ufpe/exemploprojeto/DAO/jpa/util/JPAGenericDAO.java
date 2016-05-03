@@ -1,4 +1,4 @@
-package br.ufpe.exemploprojeto.DAO.jpa;
+package br.ufpe.exemploprojeto.DAO.jpa.util;
 
 import java.util.List;
 import java.util.function.Function;
@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
-import br.ufpe.exemploprojeto.DAO.GenericDAO;
 import br.ufpe.exemploprojeto.annotation.Transacao;
 
 /**

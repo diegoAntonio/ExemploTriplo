@@ -1,4 +1,4 @@
-package br.ufpe.exemploprojeto.DAO;
+package br.ufpe.exemploprojeto.DAO.jpa.util;
 
 import java.io.Serializable;
 import java.util.List;

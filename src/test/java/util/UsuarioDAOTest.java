@@ -6,17 +6,19 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import org.hamcrest.CoreMatchers;
-import org.jglue.cdiunit.ContextController;
 import org.junit.Assert;
 import org.junit.Test;
 
 import br.ufpe.exemploprojeto.DAO.LivroDAO;
 import br.ufpe.exemploprojeto.DAO.UsuarioDAO;
+import br.ufpe.exemploprojeto.DAO.exception.BadRequestDaoException;
+import br.ufpe.exemploprojeto.controlador.ControladorUsuario;
 import br.ufpe.exemploprojeto.model.Livro;
 import br.ufpe.exemploprojeto.model.Role;
 import br.ufpe.exemploprojeto.model.Usuario;
 
 public class UsuarioDAOTest extends ExemploTestEnv {
+	private static final long serialVersionUID = 4734711613523663825L;
 
 	@Inject
 	private UsuarioDAO usuarioDAO;
@@ -25,7 +27,7 @@ public class UsuarioDAOTest extends ExemploTestEnv {
 	private LivroDAO livroDAO;
 	
 	@Test
-	public void teste(){
+	public void testeDAO(){
 		Long id = 1l;
 		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
 		usuarioDAO.save(u);
@@ -36,6 +38,16 @@ public class UsuarioDAOTest extends ExemploTestEnv {
 		Assert.assertThat(u1, CoreMatchers.is(u));
 		Assert.assertTrue(livroDAO.findAll().size() == 1);
 		System.out.println(livroDAO.findAll().get(0));
+	}
+	
+	@Inject
+	private ControladorUsuario controladorUsuario;
+	
+	@Test
+	public void testeControlador() throws BadRequestDaoException{
+		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
+		controladorUsuario.inserir(u);
+		Assert.assertThat(u, CoreMatchers.is(controladorUsuario.buscarPorId(u.getId())));
 	}
 	
 }

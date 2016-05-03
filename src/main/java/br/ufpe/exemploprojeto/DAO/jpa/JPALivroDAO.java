@@ -4,6 +4,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 
 import br.ufpe.exemploprojeto.DAO.LivroDAO;
+import br.ufpe.exemploprojeto.DAO.jpa.util.JPAGenericDAO;
 import br.ufpe.exemploprojeto.annotation.DAO;
 import br.ufpe.exemploprojeto.model.Livro;
 

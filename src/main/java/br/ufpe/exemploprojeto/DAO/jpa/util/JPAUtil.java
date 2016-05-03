@@ -1,4 +1,4 @@
-package br.ufpe.exemploprojeto.DAO.jpa;
+package br.ufpe.exemploprojeto.DAO.jpa.util;
 
 import java.io.IOException;
 import java.util.Properties;

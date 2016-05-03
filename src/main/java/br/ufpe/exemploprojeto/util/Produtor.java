@@ -16,6 +16,8 @@ public class Produtor implements Serializable{
 	return LoggerFactory.getLogger(ip.getMember()
 			.getDeclaringClass().getName());
 	}
+	
+	
 }
 
 
