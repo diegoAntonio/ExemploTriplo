@@ -1,6 +1,7 @@
 package br.ufpe.exemploprojeto.DAO.jpa.util;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -16,11 +17,11 @@ import javax.persistence.Persistence;
  * Classe auxiliar do JPA para criacao de {@link EntityManager} e {@link EntityManagerFactory}
  * @author andre.alcantara
  */
-public class JPAUtil {
+public class JPAUtil implements Serializable{
+	private static final long serialVersionUID = -1544019806786181998L;
 	
-	private static String PROPERTIES_NAME = "application.properties";
-	
-	
+//	private static String PROPERTIES_NAME = "application.properties";
+
 	/**
 	 * Fecha um EntityManger assim que seu escopo acabar
 	 * @param EManager - {@link EntityManager}
@@ -32,19 +33,30 @@ public class JPAUtil {
 	}
 	
 	/**
+	 * Cria um {@link Properties} com o properties de persistencia.
+	 * 
+	 * @return {@link Properties}
+	 * @throws IOException - Erro ao ler o arquivo.
+	 */
+	@Produces
+	private Properties createProperties(){
+		Properties props = new Properties();
+		try {
+			props.load(JPAUtil.class.getClassLoader().getResourceAsStream("application.properties"));
+			return props;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
+	
+	/**
 	 * Cria um {@link EntityManagerFactory} assim que eh solicitado.
 	 * @return {@link EntityManagerFactory} 
 	 */
 	@Produces @ApplicationScoped
-	private EntityManagerFactory createEntityManagerFactory(){
-		Properties props = new Properties();
-		try {
-			props.load(JPAUtil.class.getClassLoader().getResourceAsStream(PROPERTIES_NAME));
-			return Persistence.createEntityManagerFactory(props.getProperty("persistenciaJPA"), props);
-		}catch (IOException e){
-			e.printStackTrace();
-		}
-		return null;
+	private EntityManagerFactory createEntityManagerFactory(Properties props){
+		return Persistence.createEntityManagerFactory(props.getProperty("persistenciaJPA"), props);
 	}
 	
 	/**

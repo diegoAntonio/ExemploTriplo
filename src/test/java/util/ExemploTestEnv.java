@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.jglue.cdiunit.ActivatedAlternatives;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.AdditionalPackages;
 import org.jglue.cdiunit.CdiRunner;
@@ -15,12 +16,11 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
+import alternatives.AlternativeProduces;
 import br.ufpe.exemploprojeto.DAO.jpa.JPAUsuarioDAO;
 import br.ufpe.exemploprojeto.DAO.jpa.util.JPAUtil;
-import br.ufpe.exemploprojeto.annotation.DAO;
 import br.ufpe.exemploprojeto.annotation.interceptador.TransacaoInterceptor;
-import br.ufpe.exemploprojeto.annotation.literal.AnnotationDAOLiteral;
-import br.ufpe.exemploprojeto.controlador.Factory;
+import br.ufpe.exemploprojeto.controlador.Controlador;
 import br.ufpe.exemploprojeto.util.Produtor;
 
 
@@ -31,8 +31,9 @@ import br.ufpe.exemploprojeto.util.Produtor;
  *
  */
 @RunWith(CdiRunner.class)
-@AdditionalClasses(value = { TransacaoInterceptor.class, Produtor.class, AnnotationDAOLiteral.class, DAO.class, Factory.class})
-@AdditionalPackages(value = { JPAUtil.class, JPAUsuarioDAO.class })
+@AdditionalClasses(value = { TransacaoInterceptor.class, Produtor.class, AlternativeProduces.class})
+@AdditionalPackages(value = { JPAUtil.class, JPAUsuarioDAO.class, Controlador.class })
+@ActivatedAlternatives(value = { AlternativeProduces.class})
 @InRequestScope
 public abstract class ExemploTestEnv implements Serializable{
 	private static final long serialVersionUID = -6211366961758099674L;
@@ -47,8 +48,9 @@ public abstract class ExemploTestEnv implements Serializable{
 	private ContextController contextControle;
 	
 	@BeforeClass
-	public static void aoCarregarAClasse(){
-		configureEntityManager();
+	public static void setUp(){
+		//No inicio do teste da classe.
+//		configureEntityManager();
 	}
 	
 	@Before
@@ -65,10 +67,14 @@ public abstract class ExemploTestEnv implements Serializable{
 	private void resetBanco() {
 		EManager.getTransaction().begin();
 		EManager.createNativeQuery("delete from role_usuario;").executeUpdate(); 
+		
 		EManager.createNativeQuery("delete from usuario;").executeUpdate();
 		EManager.createNativeQuery("delete from livro;").executeUpdate();
-		EManager.createNativeQuery("ALTER SEQUENCE usuario_id_seq RESTART WITH 1;").executeUpdate();
+		EManager.createNativeQuery("delete from historico_usuario;").executeUpdate();
+		
+		EManager.createNativeQuery("ALTER SEQUENCE historico_usuario_id_seq RESTART WITH 1;").executeUpdate();
 		EManager.createNativeQuery("ALTER SEQUENCE livro_id_seq RESTART WITH 1;").executeUpdate();
+		EManager.createNativeQuery("ALTER SEQUENCE usuario_id_seq RESTART WITH 1;").executeUpdate();
 		EManager.getTransaction().commit();
 		this.novaRequest();
 	}

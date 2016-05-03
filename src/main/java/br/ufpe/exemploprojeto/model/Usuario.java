@@ -39,6 +39,9 @@ public class Usuario implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date dtNascimento;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date timestamp;
+	
 	@ElementCollection(targetClass=Role.class)
 	@Enumerated(EnumType.STRING)
 	@CollectionTable(name="role_usuario")
@@ -53,6 +56,7 @@ public class Usuario implements Serializable {
 		u.cpf = cpf;
 		u.dtNascimento = dtNascimento;
 		u.permissoes = permissoes;
+		u.timestamp = new Date();
 		return u;
 	}
 
@@ -111,6 +115,14 @@ public class Usuario implements Serializable {
 	
 	public void setPermissoes(List<Role> permissoes) {
 		this.permissoes = permissoes;
+	}
+	
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 
 import br.ufpe.exemploprojeto.DAO.exception.BadRequestDaoException;
 import br.ufpe.exemploprojeto.DAO.jpa.util.GenericDAO;
+import br.ufpe.exemploprojeto.annotation.Transacao;
 
 @ApplicationScoped
 @SuppressWarnings("unchecked")
@@ -37,6 +38,7 @@ public abstract class Controlador<Chave, Entidade> implements Serializable {
 		genericDAO = fabrica.factoryDao(entidadeClasse);
 	}
 	
+	@Transacao
 	public void inserir(Entidade user) throws BadRequestDaoException {
 		try {
 			genericDAO.save(user);
@@ -46,6 +48,7 @@ public abstract class Controlador<Chave, Entidade> implements Serializable {
 		}
 	}
 
+	@Transacao
 	public Entidade alterar(Entidade user) throws BadRequestDaoException {
 		Entidade retorno = null;
 		try {
@@ -67,6 +70,7 @@ public abstract class Controlador<Chave, Entidade> implements Serializable {
 		return retorno;
 	}
 
+	@Transacao
 	public void remover(Entidade user) throws BadRequestDaoException {
 		try {
 			genericDAO.remove(user);

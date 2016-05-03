@@ -32,4 +32,8 @@ public class CountCommit {
 	public boolean ehZero(){
 		return count == 0;
 	}
+	
+	public int getCount(){
+		return count;
+	}
 }

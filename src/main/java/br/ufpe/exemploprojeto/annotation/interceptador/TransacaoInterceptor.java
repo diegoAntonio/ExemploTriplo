@@ -6,6 +6,8 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 
+import org.slf4j.Logger;
+
 import br.ufpe.exemploprojeto.annotation.Transacao;
 import br.ufpe.exemploprojeto.annotation.interceptador.helper.CountCommit;
 
@@ -26,6 +28,9 @@ public class TransacaoInterceptor {
 	@Inject
 	private CountCommit countCommit;
 	
+	@Inject
+	private Logger log;
+	
 	/**
 	 * Metodo que sera chamado durante a interceptacao.
 	 * 
@@ -37,19 +42,32 @@ public class TransacaoInterceptor {
 	public Object metodoInterceptador(InvocationContext ctx) throws Exception{
 		Object retorno = null;
 		try {
+			log.warn("Inicio: " + countCommit.getCount());
 			if(countCommit.ehZero()){
 				em.getTransaction().begin();
 			}
+			
 			countCommit.incrementarCommit();
+
+			log.warn("atual: " + countCommit.getCount());
 			retorno = ctx.proceed();
+			
 			countCommit.decrementarCommit();
 			
 			if(countCommit.ehZero()){
 				em.getTransaction().commit();
 			}
+
+			log.warn("Fim: " + countCommit.getCount());
 		} catch (Exception e) {
+
+			log.warn("Deu Melda: " + countCommit.getCount() + ". Context: " + ctx.getMethod().toGenericString());
+			log.error(e.getMessage());
+			
 			countCommit.zerarCommit();
+			
 			em.getTransaction().rollback();
+			
 			throw e;
 		}
 		return retorno;	

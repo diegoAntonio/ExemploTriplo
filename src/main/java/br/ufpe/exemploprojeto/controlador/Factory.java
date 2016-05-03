@@ -5,8 +5,8 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import br.ufpe.exemploprojeto.DAO.jpa.JPAUsuarioDAO;
 import br.ufpe.exemploprojeto.DAO.jpa.util.GenericDAO;
+import br.ufpe.exemploprojeto.DAO.jpa.util.JPAGenericDAO;
 import br.ufpe.exemploprojeto.annotation.literal.AnnotationDAOLiteral;
 
 @ApplicationScoped
@@ -14,7 +14,7 @@ import br.ufpe.exemploprojeto.annotation.literal.AnnotationDAOLiteral;
 public class Factory {
 
 	@Inject @Any
-	private Instance<JPAUsuarioDAO> daoFactory;
+	private Instance<JPAGenericDAO<?, ?>> daoFactory;
 	
 	public GenericDAO factoryDao(Class<?> clazz){
 		return daoFactory.select(AnnotationDAOLiteral.network(clazz)).get();
