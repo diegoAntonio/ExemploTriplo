@@ -33,12 +33,14 @@ public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave
 	}
 	
 	@Override
+	@Transacao
 	public Entidade save(final Entidade e) {
 		em.persist(e);
 		return e;
 	}
 
 	@Override
+	@Transacao
 	public Entidade update(Entidade e) {
 		em.merge(e);
 		return e;
@@ -50,6 +52,7 @@ public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave
 	}
 
 	@Override
+	@Transacao
 	public void remove(final Entidade e) {
 		em.remove(em.merge(e));
 	}

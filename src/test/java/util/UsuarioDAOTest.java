@@ -18,6 +18,7 @@ import br.ufpe.exemploprojeto.model.HistoricoUsuario;
 import br.ufpe.exemploprojeto.model.Livro;
 import br.ufpe.exemploprojeto.model.Role;
 import br.ufpe.exemploprojeto.model.Usuario;
+import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
 
 public class UsuarioDAOTest extends ExemploTestEnv {
 	private static final long serialVersionUID = 4734711613523663825L;
@@ -68,11 +69,17 @@ public class UsuarioDAOTest extends ExemploTestEnv {
 
 	@Test
 	public void testeDaos(){
-		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
-		usuarioDAO.save(u);
-		
-		HistoricoUsuario hu = HistoricoUsuario.of(u);
-		historicoUsuarioDAO.save(hu);
+		this.EManager.getTransaction().begin();
+			Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
+			usuarioDAO.save(u);
+		this.EManager.getTransaction().commit();
+		this.novaRequest();
+		this.EManager.getTransaction().begin();
+			HistoricoUsuario hu = HistoricoUsuario.of(u, AcaoEntidade.CREATE);
+			historicoUsuarioDAO.save(hu);
+		this.EManager.getTransaction().commit();
+		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(1));
+		Assert.assertThat(historicoUsuarioDAO.findAll().size(), CoreMatchers.is(1));
 	}
 	
 }

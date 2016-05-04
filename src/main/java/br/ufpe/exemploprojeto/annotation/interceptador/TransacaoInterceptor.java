@@ -43,26 +43,27 @@ public class TransacaoInterceptor {
 		Object retorno = null;
 		try {
 			log.warn("Inicio: " + countCommit.getCount());
-			if(countCommit.ehZero()){
+			if(countCommit.ehZero() || !em.getTransaction().isActive()){
 				em.getTransaction().begin();
 			}
 			
 			countCommit.incrementarCommit();
 
-			log.warn("atual: " + countCommit.getCount());
+			log.info("atual: " + countCommit.getCount() + "EntityManager:" + em.toString() + ". Active:"+ em.getTransaction().isActive());
 			retorno = ctx.proceed();
 			
 			countCommit.decrementarCommit();
 			
-			if(countCommit.ehZero()){
+			if(countCommit.ehZero() && em.getTransaction().isActive()){
+				log.info("Active:" + em.getTransaction().isActive());
 				em.getTransaction().commit();
 			}
 
-			log.warn("Fim: " + countCommit.getCount());
+			log.info("Fim: " + countCommit.getCount() + "EntityManager:" + em.toString() + ". Active:"+ em.getTransaction().isActive());
 		} catch (Exception e) {
 
-			log.warn("Deu Melda: " + countCommit.getCount() + ". Context: " + ctx.getMethod().toGenericString());
-			log.error(e.getMessage());
+			log.warn("Deu Melda: " + countCommit.getCount() + "EntityManager:" + em.toString() + ". Active:"+ em.getTransaction().isActive() + "\n" + ". Context: " + ctx.getMethod().toGenericString());
+			log.error(e.getLocalizedMessage());
 			
 			countCommit.zerarCommit();
 			

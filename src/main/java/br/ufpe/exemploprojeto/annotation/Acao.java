@@ -12,9 +12,11 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
+import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ TYPE, METHOD, FIELD, PARAMETER, CONSTRUCTOR })
 @Qualifier
-public @interface Deleted {
-
+public @interface Acao {
+	AcaoEntidade value();
 }

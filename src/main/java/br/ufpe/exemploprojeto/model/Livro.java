@@ -1,7 +1,5 @@
 package br.ufpe.exemploprojeto.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,10 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import br.ufpe.exemploprojeto.model.util.Entidade;
+
 @Entity
 @Table(name = "livro")
 @SequenceGenerator(name = "seq_livro", sequenceName = "livro_id_seq", allocationSize = 1)
-public class Livro implements Serializable {
+public class Livro implements Entidade<Long> {
 	private static final long serialVersionUID = -2170972511893383692L;
 
 	@Id

@@ -11,6 +11,7 @@ import org.jglue.cdiunit.AdditionalPackages;
 import org.jglue.cdiunit.CdiRunner;
 import org.jglue.cdiunit.ContextController;
 import org.jglue.cdiunit.InRequestScope;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -53,6 +54,11 @@ public abstract class ExemploTestEnv implements Serializable{
 //		configureEntityManager();
 	}
 	
+	@AfterClass
+	public static void tearDown(){
+		
+	}
+	
 	@Before
 	public void antesDeCadaTeste(){
 		if(precisaResetarBanco()){
@@ -67,14 +73,15 @@ public abstract class ExemploTestEnv implements Serializable{
 	private void resetBanco() {
 		EManager.getTransaction().begin();
 		EManager.createNativeQuery("delete from role_usuario;").executeUpdate(); 
+		EManager.createNativeQuery("delete from role_historico;").executeUpdate(); 
 		
+		EManager.createNativeQuery("delete from historico_usuario;").executeUpdate();
 		EManager.createNativeQuery("delete from usuario;").executeUpdate();
 		EManager.createNativeQuery("delete from livro;").executeUpdate();
-		EManager.createNativeQuery("delete from historico_usuario;").executeUpdate();
 		
-		EManager.createNativeQuery("ALTER SEQUENCE historico_usuario_id_seq RESTART WITH 1;").executeUpdate();
 		EManager.createNativeQuery("ALTER SEQUENCE livro_id_seq RESTART WITH 1;").executeUpdate();
 		EManager.createNativeQuery("ALTER SEQUENCE usuario_id_seq RESTART WITH 1;").executeUpdate();
+		EManager.createNativeQuery("ALTER SEQUENCE historico_usuario_id_seq RESTART WITH 1;").executeUpdate();
 		EManager.getTransaction().commit();
 		this.novaRequest();
 	}

@@ -3,9 +3,11 @@ package br.ufpe.exemploprojeto.controlador;
 import javax.enterprise.event.Observes;
 
 import br.ufpe.exemploprojeto.DAO.exception.BadRequestDaoException;
+import br.ufpe.exemploprojeto.annotation.Acao;
 import br.ufpe.exemploprojeto.annotation.Transacao;
 import br.ufpe.exemploprojeto.model.HistoricoUsuario;
 import br.ufpe.exemploprojeto.model.Usuario;
+import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
 
 
 public class ControladorHistoricoUsuario extends Controlador<Long, HistoricoUsuario>{
@@ -14,9 +16,11 @@ public class ControladorHistoricoUsuario extends Controlador<Long, HistoricoUsua
 		super(HistoricoUsuario.class);
 	}
 	
+
 	@Transacao
-	public void inserirHistorico(@Observes Usuario user) throws BadRequestDaoException{
-		HistoricoUsuario historico = HistoricoUsuario.of(user);
+	public void inserirHistorico(@Observes @Acao(AcaoEntidade.CREATE) Usuario user)
+			throws BadRequestDaoException{
+		HistoricoUsuario historico = HistoricoUsuario.of(user, AcaoEntidade.CREATE);
 		super.inserir(historico);
 	}
 	
