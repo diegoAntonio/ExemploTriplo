@@ -1,7 +1,6 @@
 package br.ufpe.exemploprojeto.DAO.jpa;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;

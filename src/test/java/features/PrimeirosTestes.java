@@ -1,4 +1,4 @@
-package util;
+package features;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -22,6 +22,7 @@ import br.ufpe.exemploprojeto.model.Livro;
 import br.ufpe.exemploprojeto.model.Role;
 import br.ufpe.exemploprojeto.model.Usuario;
 import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
+import util.ExemploTestEnv;
 
 public class PrimeirosTestes extends ExemploTestEnv {
 	private static final long serialVersionUID = 4734711613523663825L;
@@ -104,7 +105,6 @@ public class PrimeirosTestes extends ExemploTestEnv {
 	public void teste_historico_observer_usuario() throws BadRequestDaoException{
 		int count = quantidadeHistorico();
 		List<HistoricoUsuario> listUser = historicoUsuarioDAO.findAll();
-		
 		Assert.assertThat(listUser.size(), CoreMatchers.is(count));
 	}
 	
