@@ -7,21 +7,20 @@ import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.CDI;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- * TODO: Retirar {@link SuppressWarnings}
  * Classe auxiliar do JPA para criacao de {@link EntityManager} e {@link EntityManagerFactory}
  * @author andre.alcantara
  */
 public class JPAUtil implements Serializable{
 	private static final long serialVersionUID = -1544019806786181998L;
 	
-//	private static String PROPERTIES_NAME = "application.properties";
-
 	/**
 	 * Fecha um EntityManger assim que seu escopo acabar
 	 * @param EManager - {@link EntityManager}
@@ -30,6 +29,24 @@ public class JPAUtil implements Serializable{
 		if(EManager != null && EManager.isOpen()){
 			EManager.close();
 		}
+	}
+	
+	/**
+	 * Busca um {@link EntityManager} dentro do {@link CDI}
+	 * <pre>Em @RequestScoped</pre>
+	 * @return - {@link EntityManager}
+	 */
+	public static EntityManager staticEntityManage(){
+		 return JPAUtil.staticClassCDI(EntityManager.class);
+	}
+	
+	/**
+	 * Busca um {@link EntityManagerFactory} dentro do {@link CDI}
+	 * <pre>Em @ApplicationScoped</pre>
+	 * @return - {@link EntityManagerFactory}
+	 */
+	public static EntityManagerFactory staticEntityManageFactory(){
+		 return JPAUtil.staticClassCDI(EntityManagerFactory.class);
 	}
 	
 	/**
@@ -73,7 +90,6 @@ public class JPAUtil implements Serializable{
 	 * Fecha um EntityManger assim que seu escopo acabar
 	 * @param EManager - {@link EntityManager}
 	 */
-	@SuppressWarnings("unused")
 	private void destroyerEntityManager(@Disposes EntityManager EManager){
 		JPAUtil.fecharEntityManager(EManager);
 	}
@@ -82,10 +98,14 @@ public class JPAUtil implements Serializable{
 	 * Fecha a fabrica de EntityManager. Vai ser usado quando fizer Testes unitarios.
 	 * @param emfactory - {@link EntityManagerFactory}
 	 */
-	@SuppressWarnings("unused")
 	private void destroyerEntityManagerFactory(@Disposes EntityManagerFactory emfactory){
 		if(emfactory != null && emfactory.isOpen()) {
 			emfactory.close();
 		}
+	}
+	
+	private static <T> T staticClassCDI(Class<T> clazz){
+		 Instance<T> instance = CDI.current().select(clazz);
+		    return instance.get();
 	}
 }

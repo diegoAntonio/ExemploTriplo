@@ -46,18 +46,12 @@ public class TransacaoInterceptor {
 		Object retorno = null;
 		try {
 			if (countCommit.ehZero() && !em.getTransaction().isActive()) {
-				log.info("Aberto commit");
 				em.getTransaction().begin();
 			}
-
 			countCommit.incrementarCommit();
-
 			retorno = ctx.proceed();
-
 			countCommit.decrementarCommit();
-
 			if (countCommit.ehZero() && em.getTransaction().isActive()) {
-				log.info("Commitado");
 				em.getTransaction().commit();
 			}
 		} catch (Exception e) {

@@ -1,6 +1,5 @@
 package util;
 import java.io.Serializable;
-import java.lang.reflect.Field;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -21,7 +20,7 @@ import alternatives.AlternativeProduces;
 import br.ufpe.exemploprojeto.DAO.jpa.JPAUsuarioDAO;
 import br.ufpe.exemploprojeto.DAO.jpa.util.JPAUtil;
 import br.ufpe.exemploprojeto.annotation.interceptador.TransacaoInterceptor;
-import br.ufpe.exemploprojeto.controlador.Controlador;
+import br.ufpe.exemploprojeto.controlador.ControladorGeneric;
 import br.ufpe.exemploprojeto.util.Produtor;
 
 
@@ -33,7 +32,7 @@ import br.ufpe.exemploprojeto.util.Produtor;
  */
 @RunWith(CdiRunner.class)
 @AdditionalClasses(value = { TransacaoInterceptor.class, Produtor.class, AlternativeProduces.class})
-@AdditionalPackages(value = { JPAUtil.class, JPAUsuarioDAO.class, Controlador.class })
+@AdditionalPackages(value = { JPAUtil.class, JPAUsuarioDAO.class, ControladorGeneric.class })
 @ActivatedAlternatives(value = { AlternativeProduces.class})
 @InRequestScope
 public abstract class ExemploTestEnv implements Serializable{
@@ -92,20 +91,6 @@ public abstract class ExemploTestEnv implements Serializable{
 			contextControle.openRequest();
 		}catch(RuntimeException e){
 			logger.error(e.getMessage());
-		}
-	}
-	
-	private static void configureEntityManager() {
-		try {
-			String banco = "application-unitTest.properties";
-			Field field = JPAUtil.class.getDeclaredField("PROPERTIES_NAME");
-			field.setAccessible(true);
-			field.set("null", banco);
-		} catch (NoSuchFieldException |
-				 SecurityException |
-				 IllegalArgumentException |
-				 IllegalAccessException e) {
-			e.printStackTrace();
 		}
 	}
 }

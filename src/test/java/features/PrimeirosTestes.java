@@ -13,10 +13,10 @@ import org.junit.Test;
 import br.ufpe.exemploprojeto.DAO.HistoricoUsuarioDAO;
 import br.ufpe.exemploprojeto.DAO.LivroDAO;
 import br.ufpe.exemploprojeto.DAO.UsuarioDAO;
-import br.ufpe.exemploprojeto.DAO.exception.BadRequestDaoException;
-import br.ufpe.exemploprojeto.DAO.jpa.util.GenericDAO;
+import br.ufpe.exemploprojeto.DAO.util.GenericDAO;
 import br.ufpe.exemploprojeto.annotation.DAO;
 import br.ufpe.exemploprojeto.controlador.ControladorUsuario;
+import br.ufpe.exemploprojeto.controlador.exception.ControladorException;
 import br.ufpe.exemploprojeto.model.HistoricoUsuario;
 import br.ufpe.exemploprojeto.model.Livro;
 import br.ufpe.exemploprojeto.model.Role;
@@ -77,14 +77,14 @@ public class PrimeirosTestes extends ExemploTestEnv {
 	}
 
 	@Test
-	public void teste_controlador() throws BadRequestDaoException {
+	public void teste_controlador() throws ControladorException {
 		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
 		controladorUsuario.inserir(u);
 		Assert.assertThat(u, CoreMatchers.is(controladorUsuario.buscarPorId(u.getId())));
 	}
 
 	@Test
-	public void teste_evento_controlador() throws BadRequestDaoException {
+	public void teste_evento_controlador() throws ControladorException {
 		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
 		controladorUsuario.inserir(u);
 		int size = historicoUsuarioDAO.findAll().size();
@@ -102,13 +102,13 @@ public class PrimeirosTestes extends ExemploTestEnv {
 	}
 	
 	@Test
-	public void teste_historico_observer_usuario() throws BadRequestDaoException{
+	public void teste_historico_observer_usuario() throws ControladorException{
 		int count = quantidadeHistorico();
 		List<HistoricoUsuario> listUser = historicoUsuarioDAO.findAll();
 		Assert.assertThat(listUser.size(), CoreMatchers.is(count));
 	}
 	
-	public int quantidadeHistorico() throws BadRequestDaoException{
+	public int quantidadeHistorico() throws ControladorException{
 		int count = 0;
 		Long id = 1l;
 		String novoCpf = "22222222222";

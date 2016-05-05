@@ -38,7 +38,6 @@ public class JPAHistoricoUsuarioDAO extends JPAGenericDAO<Long, HistoricoUsuario
 		return retorno;
 	}
 	
-	
 	public Usuario getUsuario(HistoricoUsuario user){
 		return super.usingEntityManger(em -> em.find(Usuario.class, user.getIdUsuario()));
 	}

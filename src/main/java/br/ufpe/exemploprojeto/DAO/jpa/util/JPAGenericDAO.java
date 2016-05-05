@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
+import br.ufpe.exemploprojeto.DAO.util.GenericDAO;
 import br.ufpe.exemploprojeto.annotation.Transacao;
 
 /**
