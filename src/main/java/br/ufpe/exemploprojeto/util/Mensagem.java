@@ -1,4 +1,4 @@
-package br.ufpe.exemploprojeto.mensagem;
+package br.ufpe.exemploprojeto.util;
 
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
@@ -29,6 +29,6 @@ public class Mensagem {
 	}
 	
 	private static class MensagemHolder{
-		private static final ResourceBundle HOLDER = ResourceBundle.getBundle("mensagem");
+		private static final ResourceBundle HOLDER = ResourceBundle.getBundle("messages.mensagem");
 	}
 }

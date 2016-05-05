@@ -68,6 +68,17 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		genericDAO.remove(u);
 		Assert.assertThat(genericDAO.findAll().size(), CoreMatchers.is(0));
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void tese_role_valueof_error(){
+		Role.valueOf(1001);
+		Assert.assertTrue(false);
+	}
+	
+	@Test
+	public void tese_role_valueof(){
+		Assert.assertThat(Role.valueOf(1), CoreMatchers.is(Role.ADMIN));
+	}
 
 	public void teste_livroDAO() {
 		Livro livro = Livro.of("Java 8 a gambi", "Andre Alcantara", "Nao sei o que e isso", 200, 0.5D,
