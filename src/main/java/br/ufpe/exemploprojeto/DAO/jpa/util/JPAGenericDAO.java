@@ -53,8 +53,9 @@ public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave
 
 	@Override
 	@Transacao
-	public void remove(final Entidade e) {
-		em.remove(em.merge(e));
+	public void remove(Entidade e) {
+		Entidade e1 = em.merge(e);
+		em.remove(e1);
 	}
 
 	@Override

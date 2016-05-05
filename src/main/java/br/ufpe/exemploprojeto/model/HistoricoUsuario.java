@@ -1,8 +1,10 @@
 package br.ufpe.exemploprojeto.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -24,49 +26,48 @@ import br.ufpe.exemploprojeto.model.util.Entidade;
 
 @Entity
 @Table(name = "historico_usuario")
-@SequenceGenerator(name="seq_historico_ususario", allocationSize=1, sequenceName="historico_usuario_id_seq")
-public class HistoricoUsuario implements Entidade<Long>{
+@SequenceGenerator(name = "seq_historico_ususario", allocationSize = 1, sequenceName = "historico_usuario_id_seq")
+public class HistoricoUsuario implements Entidade<Long> {
 	private static final long serialVersionUID = 8324816741279180157L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_historico_ususario")
 	private Long id;
-	
+
 	private String nome;
-	
+
 	private String cpf;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date dtNascimento;
-	
-	@ElementCollection(targetClass=Role.class)
+
+	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
-	@CollectionTable(name="role_historico")
-	@Column(name="role")
+	@CollectionTable(name = "role_historico")
+	@Column(name = "role")
 	private List<Role> permissoes;
-	
-	@ManyToOne(targetEntity = Usuario.class, 
-			optional = true)
-	@JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = false)
+
+	@ManyToOne(targetEntity = Usuario.class, optional = true)
+	@JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = true)
 	private Usuario usuario;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(name="acao")
+	@Column(name = "acao")
 	private AcaoEntidade acao;
-	
+
 	public static HistoricoUsuario of(Usuario user, AcaoEntidade acao) {
 		HistoricoUsuario historicoUsuario = new HistoricoUsuario();
+		historicoUsuario.timestamp = new Date();
+
 		historicoUsuario.nome = user.getNome();
 		historicoUsuario.cpf = user.getCpf();
 		historicoUsuario.dtNascimento = user.getDtNascimento();
-		historicoUsuario.permissoes = user.getPermissoes();
-		historicoUsuario.timestamp = new Date();
+		historicoUsuario.permissoes = new ArrayList<Role>(user.getPermissoes());
 		historicoUsuario.usuario = user;
 		historicoUsuario.acao = acao;
-//				Usuario.lite(user.getId());
 		return historicoUsuario;
 	}
 
@@ -102,7 +103,7 @@ public class HistoricoUsuario implements Entidade<Long>{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public AcaoEntidade getAcao() {
 		return acao;
 	}
@@ -157,5 +158,5 @@ public class HistoricoUsuario implements Entidade<Long>{
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
-	}	
+	}
 }

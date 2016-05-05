@@ -12,65 +12,60 @@ import br.ufpe.exemploprojeto.annotation.Transacao;
 import br.ufpe.exemploprojeto.annotation.interceptador.helper.CountCommit;
 
 /**
- * Classer interceptadora de metodos que tenham a anotacao {@link Transacao}.
- * A classe e responsavel por deixar os metodos transacionais.
- * Iniciando o a transacao do JPA e finalizando ao final de metodo anotado.
+ * Classer interceptadora de metodos que tenham a anotacao {@link Transacao}. A
+ * classe e responsavel por deixar os metodos transacionais. Iniciando o a
+ * transacao do JPA e finalizando ao final de metodo anotado.
  * 
  * @author andre.alcantara
  *
  */
-@Interceptor @Transacao
+@Interceptor
+@Transacao
 public class TransacaoInterceptor {
 
 	@Inject
 	private EntityManager em;
-	
+
 	@Inject
 	private CountCommit countCommit;
-	
+
 	@Inject
 	private Logger log;
-	
+
 	/**
 	 * Metodo que sera chamado durante a interceptacao.
 	 * 
-	 * @param ctx - {@link InvocationContext} Contexto do weld.
+	 * @param ctx
+	 *            - {@link InvocationContext} Contexto do weld.
 	 * @return - Objeto do metodo.
-	 * @throws Exception - Erro que pode vir do fluxo do weld.
+	 * @throws Exception
+	 *             - Erro que pode vir do fluxo do weld.
 	 */
 	@AroundInvoke
-	public Object metodoInterceptador(InvocationContext ctx) throws Exception{
+	public Object metodoInterceptador(InvocationContext ctx) throws Exception {
 		Object retorno = null;
 		try {
-			log.warn("Inicio: " + countCommit.getCount());
-			if(countCommit.ehZero() || !em.getTransaction().isActive()){
+			if (countCommit.ehZero() && !em.getTransaction().isActive()) {
+				log.info("Aberto commit");
 				em.getTransaction().begin();
 			}
-			
+
 			countCommit.incrementarCommit();
 
-			log.info("atual: " + countCommit.getCount() + "EntityManager:" + em.toString() + ". Active:"+ em.getTransaction().isActive());
 			retorno = ctx.proceed();
-			
+
 			countCommit.decrementarCommit();
-			
-			if(countCommit.ehZero() && em.getTransaction().isActive()){
-				log.info("Active:" + em.getTransaction().isActive());
+
+			if (countCommit.ehZero() && em.getTransaction().isActive()) {
+				log.info("Commitado");
 				em.getTransaction().commit();
 			}
-
-			log.info("Fim: " + countCommit.getCount() + "EntityManager:" + em.toString() + ". Active:"+ em.getTransaction().isActive());
 		} catch (Exception e) {
-
-			log.warn("Deu Melda: " + countCommit.getCount() + "EntityManager:" + em.toString() + ". Active:"+ em.getTransaction().isActive() + "\n" + ". Context: " + ctx.getMethod().toGenericString());
 			log.error(e.getLocalizedMessage());
-			
 			countCommit.zerarCommit();
-			
 			em.getTransaction().rollback();
-			
 			throw e;
 		}
-		return retorno;	
+		return retorno;
 	}
 }

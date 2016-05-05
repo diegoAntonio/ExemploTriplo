@@ -15,12 +15,26 @@ public class ControladorHistoricoUsuario extends Controlador<Long, HistoricoUsua
 	public ControladorHistoricoUsuario() {
 		super(HistoricoUsuario.class);
 	}
-	
 
 	@Transacao
-	public void inserirHistorico(@Observes @Acao(AcaoEntidade.CREATE) Usuario user)
+	public void inserirHistoricoUsuarioInserirUsuario(@Observes @Acao(AcaoEntidade.CREATE) Usuario user)
 			throws BadRequestDaoException{
 		HistoricoUsuario historico = HistoricoUsuario.of(user, AcaoEntidade.CREATE);
+		super.inserir(historico);
+	}
+	
+	@Transacao
+	public void inserirHistoricoUsuarioAlterarUsuario(@Observes @Acao(AcaoEntidade.UPDATE) Usuario user)
+			throws BadRequestDaoException{
+		HistoricoUsuario historico = HistoricoUsuario.of(user, AcaoEntidade.UPDATE);
+		super.inserir(historico);
+	}
+	
+	@Transacao
+	public void inserirHistoricoUsuarioRemoverUsuario(@Observes @Acao(AcaoEntidade.DELETE) Usuario user)
+			throws BadRequestDaoException{
+		HistoricoUsuario historico = HistoricoUsuario.of(user, AcaoEntidade.DELETE);
+		historico.setUsuario(null);
 		super.inserir(historico);
 	}
 	

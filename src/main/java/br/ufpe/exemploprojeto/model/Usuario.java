@@ -51,7 +51,7 @@ public class Usuario implements Entidade<Long> {
 	
 	public Usuario(){}
 	
-	public static Usuario lite(long id){
+	public static Usuario lite(Long id){
 		Usuario usuario = new Usuario();
 		usuario.setId(id);
 		return usuario;

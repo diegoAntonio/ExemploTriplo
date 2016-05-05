@@ -30,8 +30,8 @@ public class ControladorUsuario extends Controlador<Long,Usuario> {
 	@Override
 	@Transacao
 	public void remover(Usuario user) throws BadRequestDaoException{
-		super.inserir(user);
 		usuarioEvento.select(AnnotationAcaoLiteral.network(AcaoEntidade.DELETE)).fire(user);
+		super.remover(user);
 	}
 	
 	@Override
