@@ -2,6 +2,7 @@ package util;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -102,7 +103,9 @@ public class PrimeirosTestes extends ExemploTestEnv {
 	@Test
 	public void teste_historico_observer_usuario() throws BadRequestDaoException{
 		int count = quantidadeHistorico();
-		Assert.assertThat(historicoUsuarioDAO.findAll().size(), CoreMatchers.is(count));
+		List<HistoricoUsuario> listUser = historicoUsuarioDAO.findAll();
+		
+		Assert.assertThat(listUser.size(), CoreMatchers.is(count));
 	}
 	
 	public int quantidadeHistorico() throws BadRequestDaoException{

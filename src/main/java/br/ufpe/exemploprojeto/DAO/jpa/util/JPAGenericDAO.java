@@ -76,8 +76,8 @@ public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave
 		return this.entidadeClass;
 	}
 	
-	protected Entidade usingEntityManger(Function<EntityManager, Entidade> funcao){
-		Entidade entidade = null;
+	protected <R> R usingEntityManger(Function<EntityManager, R> funcao){
+		R entidade = null;
 		try{
 			entidade = funcao.apply(em);
 		} catch(Throwable e) {

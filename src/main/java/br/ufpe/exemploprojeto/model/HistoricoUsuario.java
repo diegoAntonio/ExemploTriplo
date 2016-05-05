@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -14,18 +13,20 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
 import br.ufpe.exemploprojeto.model.util.Entidade;
 
 @Entity
-@Table(name = "historico_usuario")
+@Table(name = "historico_usuario",
+	   uniqueConstraints=@UniqueConstraint(columnNames={"id", "id_usuario"})
+)
 @SequenceGenerator(name = "seq_historico_ususario", allocationSize = 1, sequenceName = "historico_usuario_id_seq")
 public class HistoricoUsuario implements Entidade<Long> {
 	private static final long serialVersionUID = 8324816741279180157L;
@@ -47,8 +48,10 @@ public class HistoricoUsuario implements Entidade<Long> {
 	@Column(name = "role")
 	private List<Role> permissoes;
 
-	@ManyToOne(targetEntity = Usuario.class, optional = true)
-	@JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = true)
+	@Column(name="id_usuario")
+	private Long idUsuario;
+	
+	@Transient
 	private Usuario usuario;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -67,6 +70,7 @@ public class HistoricoUsuario implements Entidade<Long> {
 		historicoUsuario.dtNascimento = user.getDtNascimento();
 		historicoUsuario.permissoes = new ArrayList<Role>(user.getPermissoes());
 		historicoUsuario.usuario = user;
+		historicoUsuario.idUsuario = user.getId();
 		historicoUsuario.acao = acao;
 		return historicoUsuario;
 	}
@@ -102,6 +106,14 @@ public class HistoricoUsuario implements Entidade<Long> {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public AcaoEntidade getAcao() {
