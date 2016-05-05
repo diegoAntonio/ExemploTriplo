@@ -40,8 +40,8 @@ dependencies {
   compile 'com.sun.faces:jsf-impl:2.2.12'
   
   // Spring Security
-  // compile 'org.springframework.security:spring-security-web:4.0.2.RELEASE'
-  // compile 'org.springframework.security:spring-security-config:4.0.2.RELEASE'
+  compile 'org.springframework.security:spring-security-web:4.1.0.RELEASE'
+  compile 'org.springframework.security:spring-security-config:4.1.0.RELEASE'
 
   // Código de produção usa log SLF4J em tempo de compilação
   compile 'jstl:jstl:1.2'

@@ -1,4 +1,4 @@
-package br.ufpe.exemploprojeto.model;
+package br.ufpe.exemploprojeto.model.util;
 
 import java.util.Arrays;
 import java.util.function.Predicate;

@@ -22,10 +22,11 @@ import javax.persistence.UniqueConstraint;
 
 import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
 import br.ufpe.exemploprojeto.model.util.Entidade;
+import br.ufpe.exemploprojeto.model.util.Role;
 
 @Entity
 @Table(name = "historico_usuario",
-	   uniqueConstraints=@UniqueConstraint(columnNames={"id", "id_usuario"})
+	   uniqueConstraints=@UniqueConstraint(columnNames={"id", "usuario_id","pessoa_usuario_id"})
 )
 @SequenceGenerator(name = "seq_historico_ususario", allocationSize = 1, sequenceName = "historico_usuario_id_seq")
 public class HistoricoUsuario implements Entidade<Long> {
@@ -35,24 +36,28 @@ public class HistoricoUsuario implements Entidade<Long> {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_historico_ususario")
 	private Long id;
 
-	private String nome;
 
-	private String cpf;
+	private String login;
 
-	@Temporal(TemporalType.DATE)
-	private Date dtNascimento;
+	private String pass;
 
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "role_historico")
+	@CollectionTable(name = "role_usuario")
 	@Column(name = "role")
 	private List<Role> permissoes;
 
-	@Column(name="id_usuario")
+	@Column(name="usuario_id")
 	private Long idUsuario;
+	
+	@Column(name="pessoa_usuario_id")
+	private Long idPessoa;
 	
 	@Transient
 	private Usuario usuario;
+	
+	@Transient
+	private Pessoa pessoa;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
@@ -64,10 +69,9 @@ public class HistoricoUsuario implements Entidade<Long> {
 	public static HistoricoUsuario of(Usuario user, AcaoEntidade acao) {
 		HistoricoUsuario historicoUsuario = new HistoricoUsuario();
 		historicoUsuario.timestamp = new Date();
-
-		historicoUsuario.nome = user.getNome();
-		historicoUsuario.cpf = user.getCpf();
-		historicoUsuario.dtNascimento = user.getDtNascimento();
+		historicoUsuario.login = user.getLogin();
+		historicoUsuario.pass = user.getPass();
+		
 		historicoUsuario.permissoes = new ArrayList<Role>(user.getPermissoes());
 		historicoUsuario.usuario = user;
 		historicoUsuario.idUsuario = user.getId();
@@ -124,28 +128,20 @@ public class HistoricoUsuario implements Entidade<Long> {
 		this.acao = acao;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
-	public String getCpf() {
-		return cpf;
+	public String getPass() {
+		return pass;
 	}
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public Date getDtNascimento() {
-		return dtNascimento;
-	}
-
-	public void setDtNascimento(Date dtNascimento) {
-		this.dtNascimento = dtNascimento;
+	public void setPass(String pass) {
+		this.pass = pass;
 	}
 
 	public List<Role> getPermissoes() {
@@ -162,6 +158,22 @@ public class HistoricoUsuario implements Entidade<Long> {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Long getIdPessoa() {
+		return idPessoa;
+	}
+
+	public void setIdPessoa(Long idPessoa) {
+		this.idPessoa = idPessoa;
+	}
+
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	public Date getTimestamp() {

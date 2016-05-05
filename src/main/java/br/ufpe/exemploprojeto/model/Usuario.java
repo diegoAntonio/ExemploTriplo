@@ -1,9 +1,6 @@
 package br.ufpe.exemploprojeto.model;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,12 +13,15 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.ufpe.exemploprojeto.model.util.Entidade;
+import br.ufpe.exemploprojeto.model.util.Role;
 
 @Entity
 @Table(name = "usuario")
@@ -32,56 +32,47 @@ public class Usuario implements Entidade<Long> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usuario")
 	private Long id;
+
+	private String login;
+
+	private String pass;
 	
-	private String nome;
-	
-	private String cpf;
-	
-	@Temporal(TemporalType.DATE)
-	private Date dtNascimento;
-	
+	@OneToOne
+    @JoinColumn(name="pessoa_id")
+	private Pessoa pessoa;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
-	
-	@ElementCollection(targetClass=Role.class)
+
+	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
-	@CollectionTable(name="role_usuario")
-	@Column(name="role")
+	@CollectionTable(name = "role_usuario")
+	@Column(name = "role")
 	private List<Role> permissoes;
-	
-	public Usuario(){}
-	
-	public static Usuario lite(Long id){
+
+	public Usuario() {
+	}
+
+	public static Usuario lite(Long id) {
 		Usuario usuario = new Usuario();
 		usuario.setId(id);
 		return usuario;
 	}
-	
-	public static Usuario of(String nome, String cpf, Date dtNascimento, List<Role> permissoes) {
+
+	public static Usuario of(String login, String pass, Pessoa pessoa, List<Role> permissoes) {
 		Usuario u = new Usuario();
-		u.nome = nome;
-		u.cpf = cpf;
-		u.dtNascimento = dtNascimento;
-		u.permissoes = permissoes;
+		u.login = login;
+		u.pass = pass;
+		u.pessoa = pessoa;
 		u.timestamp = new Date();
+		u.permissoes = new ArrayList<>(permissoes);
 		return u;
 	}
 
-	public String toString(){
-		return "Id: " + id + ", Nome:" + nome + ", Idade: " + getIdade() + 
-				" Permissoes: " + permissoes + ".";
-	}
-	
-	public int getIdade(){
-		int retorno = -1;
-		if(dtNascimento != null){
-			Instant dtNascimentoInstant = Instant.ofEpochMilli(dtNascimento.getTime());
-//			Instant dtNascimentoInstant = dtNascimento.toInstant();
-			Period p = Period.between(dtNascimentoInstant
-					.atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now());
-			retorno = p.normalized().getYears();
-		}	
-		return retorno;
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", login=" + login + ", pass=" + pass + ", timestamp=" + timestamp
+				+ ", permissoes=" + permissoes + "]";
 	}
 
 	public Long getId() {
@@ -92,44 +83,44 @@ public class Usuario implements Entidade<Long> {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getLogin() {
+		return login;
 	}
-	
-	public void setNome(String nome) {
-		this.nome = nome;
+
+	public void setLogin(String login) {
+		this.login = login;
 	}
-	
-	public String getCpf() {
-		return cpf;
+
+	public String getPass() {
+		return pass;
 	}
-	
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+
+	public void setPass(String pass) {
+		this.pass = pass;
 	}
-	
-	public Date getDtNascimento() {
-		return dtNascimento;
-	}
-	
-	public void setDtNascimento(Date dtNascimento) {
-		this.dtNascimento = dtNascimento;
-	}
-	
-	public List<Role> getPermissoes() {
-		return permissoes;
-	}
-	
-	public void setPermissoes(List<Role> permissoes) {
-		this.permissoes = permissoes;
-	}
-	
+
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
+	public List<Role> getPermissoes() {
+		return permissoes;
+	}
+
+	public void setPermissoes(List<Role> permissoes) {
+		this.permissoes = permissoes;
 	}
 
 	@Override
@@ -156,5 +147,5 @@ public class Usuario implements Entidade<Long> {
 			return false;
 		return true;
 	}
-	
+
 }
