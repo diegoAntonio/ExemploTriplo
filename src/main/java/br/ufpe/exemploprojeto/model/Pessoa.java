@@ -16,7 +16,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 
 import br.ufpe.exemploprojeto.model.util.Endereco;
 import br.ufpe.exemploprojeto.model.util.EntidadePadrao;

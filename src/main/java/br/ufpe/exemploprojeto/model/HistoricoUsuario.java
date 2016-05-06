@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,13 +25,13 @@ import javax.persistence.UniqueConstraint;
 
 import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
 import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
-import br.ufpe.exemploprojeto.model.util.Role;
 
 @Entity
 @Table(name = "historico_usuario",
 	   uniqueConstraints=@UniqueConstraint(columnNames={"id", "usuario_id","pessoa_usuario_id"}, name="unique_historico_usuario_usuario_pessoa")
 )
 @SequenceGenerator(name = "seq_historico_ususario", allocationSize = 1, sequenceName = "historico_usuario_id_seq")
+//TODO: resolver problema de conflito ManyToMany
 public class HistoricoUsuario implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = 8324816741279180157L;
 
@@ -42,10 +44,10 @@ public class HistoricoUsuario implements EntidadePadrao<Long> {
 
 	private String pass;
 
-	@ElementCollection(targetClass = Role.class)
-	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "role_historico", foreignKey=@ForeignKey(name="FK_historico_usuario_role"))
-	@Column(name = "role")
+
+	@ManyToMany(fetch=FetchType.EAGER, targetEntity=Role.class, cascade=CascadeType.ALL)
+	@JoinTable(name="role_historico",joinColumns=@JoinColumn(referencedColumnName="historico_id"),
+	inverseJoinColumns=@JoinColumn(referencedColumnName="role_id"))
 	private List<Role> permissoes;
 
 	@Column(name="usuario_id")

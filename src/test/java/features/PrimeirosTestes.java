@@ -6,9 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -16,6 +20,7 @@ import br.ufpe.exemploprojeto.DAO.HistoricoUsuarioDAO;
 import br.ufpe.exemploprojeto.DAO.LivroDAO;
 import br.ufpe.exemploprojeto.DAO.PessoaDAO;
 import br.ufpe.exemploprojeto.DAO.UsuarioDAO;
+import br.ufpe.exemploprojeto.DAO.jpa.util.JPAUtil;
 import br.ufpe.exemploprojeto.DAO.util.GenericDAO;
 import br.ufpe.exemploprojeto.annotation.DAO;
 import br.ufpe.exemploprojeto.controlador.ControladorUsuario;
@@ -23,10 +28,10 @@ import br.ufpe.exemploprojeto.controlador.exception.ControladorException;
 import br.ufpe.exemploprojeto.model.HistoricoUsuario;
 import br.ufpe.exemploprojeto.model.Livro;
 import br.ufpe.exemploprojeto.model.Pessoa;
+import br.ufpe.exemploprojeto.model.Role;
 import br.ufpe.exemploprojeto.model.Usuario;
 import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
 import br.ufpe.exemploprojeto.model.util.Endereco;
-import br.ufpe.exemploprojeto.model.util.Role;
 import util.ExemploTestEnv;
 
 public class PrimeirosTestes extends ExemploTestEnv {
@@ -78,15 +83,17 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		Assert.assertThat(genericDAO.findAll().size(), CoreMatchers.is(0));
 	}
 	
+	@Ignore
 	@Test(expected=IllegalArgumentException.class)
 	public void tese_role_valueof_error(){
-		Role.valueOf(1001);
-		Assert.assertTrue(false);
+//		Role.valueOf(1001);
+//		Assert.assertTrue(false);
 	}
 	
+	@Ignore
 	@Test
 	public void tese_role_valueof(){
-		Assert.assertThat(Role.valueOf(1), CoreMatchers.is(Role.ADMIN));
+//		Assert.assertThat(Role.valueOf(1), CoreMatchers.is(Role.ADMIN));
 	}
 
 	@Test
@@ -157,12 +164,20 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		return count;
 	}
 	
+	@Before
+	public void beforeClass(){
+		EManager.persist(Role.of(1l, "ADMIN", 1));
+	}
+	
 	public Usuario get_usuario(){
+		long idRole = 1;
+		
 		Endereco end = Endereco.of("Rua dos bobos", 0, null, "Lembra que a casa", "nao tinha nada", "Nem teto.");
 		Pessoa p = Pessoa.of("Andre Alcantara", "11111111111", end, new Date(LocalDate.of(1989, 10, 4).toEpochDay()));
 		BCryptPasswordEncoder password = new BCryptPasswordEncoder();
 		String senha = password.encode("12345678909");
-		Usuario u = Usuario.of("andre.alcantara", senha, p, Arrays.asList(Role.ADMIN));
+		Usuario u = Usuario.of("andre.alcantara", senha, p, Arrays.asList(Role.lite(idRole)));
+		
 		return u;
 	}
 

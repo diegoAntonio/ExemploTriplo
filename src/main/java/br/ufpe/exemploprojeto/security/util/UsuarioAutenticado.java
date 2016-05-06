@@ -3,9 +3,9 @@ package br.ufpe.exemploprojeto.security.util;
 import java.util.Date;
 import java.util.List;
 
+import br.ufpe.exemploprojeto.model.Role;
 import br.ufpe.exemploprojeto.model.Usuario;
 import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
-import br.ufpe.exemploprojeto.model.util.Role;
 
 public class UsuarioAutenticado implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = -103795365260782847L;

@@ -77,3 +77,8 @@ CREATE TABLE role_usuario
       REFERENCES usuario (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+
+
+
+
+

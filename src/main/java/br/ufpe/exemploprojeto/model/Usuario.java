@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -22,11 +21,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
-import br.ufpe.exemploprojeto.model.util.Role;
 
 @Entity
 @Table(name = "usuario")
 @SequenceGenerator(name = "seq_usuario", sequenceName = "usuario_id_seq", allocationSize = 1)
+//TODO: resolver problema de conflito ManyToMany
 public class Usuario implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = 1079619057493715949L;
 
@@ -45,10 +44,9 @@ public class Usuario implements EntidadePadrao<Long> {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 
-	@ElementCollection(targetClass = Role.class)
-	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "role_usuario", foreignKey=@ForeignKey(name="FK_usuario_role"))
-	@Column(name = "role")
+	@ManyToMany(fetch=FetchType.EAGER, targetEntity=Role.class, cascade=CascadeType.ALL)
+	@JoinTable(name="role_usuario",joinColumns=@JoinColumn(referencedColumnName="usuario_id"),
+	inverseJoinColumns=@JoinColumn(referencedColumnName="role_id"))
 	private List<Role> permissoes;
 
 	public Usuario() {
