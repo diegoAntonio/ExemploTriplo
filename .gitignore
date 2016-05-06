@@ -10,7 +10,7 @@ build
 .settings
 .checkstyle
 /WEB-INF
-/src/main/resources/META-INF/persistence.xml 
+#/src/main/resources/META-INF/persistence.xml 
 
 # Text editors
 *.swp

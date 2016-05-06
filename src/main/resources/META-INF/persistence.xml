@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<persistence-unit name="bancoNormal">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>br.ufpe.exemploprojeto.model.Usuario</class>
+		<class>br.ufpe.exemploporjeto.model.Livro</class>
+		<class>br.ufpe.exemploporjeto.model.HistoricoUsuario</class>
+		
+
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="${jdbc.driver}" />
+			<property name="javax.persistence.jdbc.url" value="${jdbc.url}" />
+			<property name="javax.persistence.jdbc.user" value="${jdbc.user}" />
+			<property name="javax.persistence.jdbc.password" value="${jdbc.password}" />
+
+			<property name="hibernate.dialect" value="${hibernate.dialect}" />
+			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
+			<property name="hibernate.format_sql" value="${hibernate.format_sql}" />
+<!-- 			<property name="hibernate.hbm2ddl.auto" value="update" /> -->
+			
+			
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="bancoTeste">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>br.ufpe.exemploprojeto.model.Usuario</class>
+		<class>br.ufpe.exemploporjeto.model.Livro</class>
+		<class>br.ufpe.exemploporjeto.model.HistoricoUsuario</class>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="${jdbc.driver}" />
+			<property name="javax.persistence.jdbc.url" value="${jdbc.url}" />
+			<property name="javax.persistence.jdbc.user" value="${jdbc.user}" />
+			<property name="javax.persistence.jdbc.password" value="${jdbc.password}" />
+
+			<property name="hibernate.dialect" value="${hibernate.dialect}" />
+			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
+			<property name="hibernate.format_sql" value="${hibernate.format_sql}" />
+			<property name="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}" />
+				
+		</properties>
+	</persistence-unit>
+	
+</persistence>
