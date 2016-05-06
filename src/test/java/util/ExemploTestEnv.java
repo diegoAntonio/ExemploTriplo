@@ -75,8 +75,8 @@ public abstract class ExemploTestEnv implements Serializable{
 		EManager.createNativeQuery("delete from role_historico;").executeUpdate(); 
 		
 		EManager.createNativeQuery("delete from historico_usuario;").executeUpdate();
-		EManager.createNativeQuery("delete from pessoa;").executeUpdate();
 		EManager.createNativeQuery("delete from usuario;").executeUpdate();
+		EManager.createNativeQuery("delete from pessoa;").executeUpdate();
 		EManager.createNativeQuery("delete from livro;").executeUpdate();
 		
 		EManager.createNativeQuery("ALTER SEQUENCE livro_id_seq RESTART WITH 1;").executeUpdate();

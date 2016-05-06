@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import br.ufpe.exemploprojeto.annotation.Transacao;
 import br.ufpe.exemploprojeto.annotation.literal.AnnotationAcaoLiteral;
 import br.ufpe.exemploprojeto.controlador.exception.ControladorException;
+import br.ufpe.exemploprojeto.model.Pessoa;
 import br.ufpe.exemploprojeto.model.Usuario;
 import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
 
@@ -19,9 +20,13 @@ public class ControladorUsuario extends ControladorGeneric<Long,Usuario> {
 	@Inject @Any
 	private Event<Usuario> usuarioEvento;
 	
+	@Inject @Any
+	private Event<Pessoa> pessoaEvento;
+	
 	@Override
 	@Transacao
 	public void inserir(Usuario user) throws ControladorException{
+		pessoaEvento.select(AnnotationAcaoLiteral.network(AcaoEntidade.CREATE)).fire(user.getPessoa());
 		super.inserir(user);
 		usuarioEvento.select(AnnotationAcaoLiteral.network(AcaoEntidade.CREATE)).fire(user);
 	}

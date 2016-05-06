@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -89,82 +88,82 @@ public class PrimeirosTestes extends ExemploTestEnv {
 	public void tese_role_valueof(){
 		Assert.assertThat(Role.valueOf(1), CoreMatchers.is(Role.ADMIN));
 	}
-	
-	@Override
-	public boolean precisaResetarBanco(){
-		return false;
-	}
-	
 
 	@Test
 	public void teste_usuarioDAO() {
-		Endereco end = Endereco.of("Rua dos bobos", 0, null, "Lembra que a casa", "nao tinha nada", "Nem teto.");
-		Pessoa p = Pessoa.of("Andre Alcantara", "11111111111", end, new Date(LocalDate.of(1989, 10, 4).toEpochDay()));
-		BCryptPasswordEncoder password = new BCryptPasswordEncoder();
-		Usuario u = Usuario.of("andre.alcantara", password.encode("123456789009"), p, Arrays.asList(Role.ADMIN));
-		pessoaDAO.save(p);
+		Usuario u = get_usuario();
+		pessoaDAO.save(u.getPessoa());
 		usuarioDAO.save(u);
 		Assert.assertTrue(usuarioDAO.findAll().size() == 1);
 		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(1));
 	}
 
-	@Ignore
 	@Test
 	public void teste_controlador() throws ControladorException {
-//		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
-//		controladorUsuario.inserir(u);
-//		Assert.assertThat(u, CoreMatchers.is(controladorUsuario.buscarPorId(u.getId())));
+		Usuario u = get_usuario();
+		controladorUsuario.inserir(u);
+		Assert.assertThat(u, CoreMatchers.is(controladorUsuario.buscarPorId(u.getId())));
 	}
 
-	@Ignore
 	@Test
 	public void teste_evento_controlador() throws ControladorException {
-//		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
-//		controladorUsuario.inserir(u);
-//		int size = historicoUsuarioDAO.findAll().size();
-//		Assert.assertThat(size, CoreMatchers.is(1));
+		Usuario u = get_usuario();
+		controladorUsuario.inserir(u);
+		int size = historicoUsuarioDAO.findAll().size();
+		Assert.assertThat(size, CoreMatchers.is(1));
 	}
 
 	@Test
 	public void teste_usuarioDao_e_historicoDao() {
-//		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
-//		usuarioDAO.save(u);
-//		HistoricoUsuario hu = HistoricoUsuario.of(u, AcaoEntidade.CREATE);
-//		historicoUsuarioDAO.save(hu);
-//		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(1));
-//		Assert.assertThat(historicoUsuarioDAO.findAll().size(), CoreMatchers.is(1));
+		Usuario u = get_usuario();
+		pessoaDAO.save(u.getPessoa());
+		usuarioDAO.save(u);
+		HistoricoUsuario hu = HistoricoUsuario.of(u, AcaoEntidade.CREATE);
+		historicoUsuarioDAO.save(hu);
+		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(1));
+		Assert.assertThat(historicoUsuarioDAO.findAll().size(), CoreMatchers.is(1));
 	}
 	
-	@Ignore
 	@Test
 	public void teste_historico_observer_usuario() throws ControladorException{
 		int count = quantidadeHistorico();
 		List<HistoricoUsuario> listUser = historicoUsuarioDAO.findAll();
+		System.out.println(listUser);
 		Assert.assertThat(listUser.size(), CoreMatchers.is(count));
 	}
 	
 	public int quantidadeHistorico() throws ControladorException{
 		int count = 0;
-//		Long id = 1l;
-//		String novoCpf = "22222222222";
-//		// Usuario inserido
-//		Usuario u = Usuario.of("Andre Alcantara", "11111111111", new Date(), Arrays.asList(Role.ADMIN));
-//		controladorUsuario.inserir(u);
-//		count++;
-//		
-//		// Usuario alterado
-//		this.novaRequest();
-//		u = genericDAO.findById(id);
-//		u.setCpf(novoCpf);
-//		controladorUsuario.alterar(u);
-//		count++;
-//
-//		// Usuario removido
-//		this.novaRequest();
-//		controladorUsuario.remover(u);
-//		count++;
+		Long id = 1l;
+		
+		String pass = (new BCryptPasswordEncoder()).encode("09987654321");
+		// Usuario inserido
+		Usuario u = get_usuario();
+		controladorUsuario.inserir(u);
+		count++;
+		
+		// Usuario alterado
+		this.novaRequest();
+		u = usuarioDAO.findById(id);
+		u.setPass(pass);
+		controladorUsuario.alterar(u);
+		count++;
+
+		// Usuario removido
+		this.novaRequest();
+		controladorUsuario.remover(u);
+		count++;
 
 		return count;
+	}
+	
+	public Usuario get_usuario(){
+		Endereco end = Endereco.of("Rua dos bobos", 0, null, "Lembra que a casa", "nao tinha nada", "Nem teto.");
+		Pessoa p = Pessoa.of("Andre Alcantara", "11111111111", end, new Date(LocalDate.of(1989, 10, 4).toEpochDay()));
+		BCryptPasswordEncoder password = new BCryptPasswordEncoder();
+		String senha = password.encode("12345678909");
+		Usuario u = Usuario.of("andre.alcantara", senha, p, Arrays.asList(Role.ADMIN));
+		return u;
 	}
 
 }

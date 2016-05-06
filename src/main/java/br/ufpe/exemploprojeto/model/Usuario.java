@@ -10,6 +10,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,8 +38,8 @@ public class Usuario implements Entidade<Long> {
 
 	private String pass;
 	
-	@OneToOne
-    @JoinColumn(name="pessoa_id")
+	@OneToOne(orphanRemoval = true, targetEntity = Pessoa.class)
+    @JoinColumn(name="pessoa_id",foreignKey=@ForeignKey(name="FK_usuario_pessoa"))
 	private Pessoa pessoa;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -46,7 +47,7 @@ public class Usuario implements Entidade<Long> {
 
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "role_usuario")
+	@CollectionTable(name = "role_usuario", foreignKey=@ForeignKey(name="FK_usuario_role"))
 	@Column(name = "role")
 	private List<Role> permissoes;
 

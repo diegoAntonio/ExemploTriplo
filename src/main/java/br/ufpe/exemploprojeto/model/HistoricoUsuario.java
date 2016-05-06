@@ -10,6 +10,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ import br.ufpe.exemploprojeto.model.util.Role;
 
 @Entity
 @Table(name = "historico_usuario",
-	   uniqueConstraints=@UniqueConstraint(columnNames={"id", "usuario_id","pessoa_usuario_id"})
+	   uniqueConstraints=@UniqueConstraint(columnNames={"id", "usuario_id","pessoa_usuario_id"}, name="unique_historico_usuario_usuario_pessoa")
 )
 @SequenceGenerator(name = "seq_historico_ususario", allocationSize = 1, sequenceName = "historico_usuario_id_seq")
 public class HistoricoUsuario implements Entidade<Long> {
@@ -43,7 +44,7 @@ public class HistoricoUsuario implements Entidade<Long> {
 
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "role_usuario")
+	@CollectionTable(name = "role_historico", foreignKey=@ForeignKey(name="FK_historico_usuario_role"))
 	@Column(name = "role")
 	private List<Role> permissoes;
 
@@ -73,11 +74,18 @@ public class HistoricoUsuario implements Entidade<Long> {
 		historicoUsuario.pass = user.getPass();
 		
 		historicoUsuario.permissoes = new ArrayList<Role>(user.getPermissoes());
+		
 		historicoUsuario.usuario = user;
+		historicoUsuario.pessoa = user.getPessoa();
+		
+		historicoUsuario.idPessoa = user.getPessoa().getId();
 		historicoUsuario.idUsuario = user.getId();
+		
 		historicoUsuario.acao = acao;
 		return historicoUsuario;
 	}
+	
+	
 
 	@Override
 	public int hashCode() {
@@ -182,5 +190,12 @@ public class HistoricoUsuario implements Entidade<Long> {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	@Override
+	public String toString() {
+		return "HistoricoUsuario [id=" + id + ", login=" + login + ", pass=" + pass + ", permissoes=" + permissoes
+				+ ", idUsuario=" + idUsuario + ", idPessoa=" + idPessoa + ", usuario=" + usuario + ", pessoa=" + pessoa
+				+ ", timestamp=" + timestamp + ", acao=" + acao + "]";
 	}
 }
