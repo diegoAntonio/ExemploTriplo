@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Insert title here</title>
+</h:head>
+<h:body>
+	<h:form prependId="false" id="f">
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+
+		<p:dialog header="Login" visible="true" closable="false"
+			draggable="false" resizable="false" width="420">
+
+			<!-- Exibe a mensagem de erro caso o login não seja realizado com sucesso -->
+			<h:panelGroup rendered="#{not empty SPRING_SECURITY_LAST_EXCEPTION}">
+				<font color="red"> <h:outputText
+						value="${SPRING_SECURITY_LAST_EXCEPTION.message}" /> <br /> <br />
+				</font>
+			</h:panelGroup>
+
+			<h:panelGrid columns="2">
+
+				<p:outputLabel for="username" value="Login:" />
+				<p:inputText id="username" required="true" maxlength="11"
+					placeholder="Apenas dígito" />
+
+				<p:outputLabel for="password" value="Senha:" />
+				<p:password id="password" required="true" autocomplete="false"
+					feedback="false" placeholder="Digite sua senha" />
+				<h:commandButton id="submit" value="Entrar" />
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>

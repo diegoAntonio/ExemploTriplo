@@ -21,13 +21,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.ufpe.exemploprojeto.model.util.Entidade;
+import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
 import br.ufpe.exemploprojeto.model.util.Role;
 
 @Entity
 @Table(name = "usuario")
 @SequenceGenerator(name = "seq_usuario", sequenceName = "usuario_id_seq", allocationSize = 1)
-public class Usuario implements Entidade<Long> {
+public class Usuario implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = 1079619057493715949L;
 
 	@Id

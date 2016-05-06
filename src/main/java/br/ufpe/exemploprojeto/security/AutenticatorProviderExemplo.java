@@ -1,9 +1,9 @@
 package br.ufpe.exemploprojeto.security;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -25,45 +25,43 @@ public class AutenticatorProviderExemplo implements AuthenticationProvider {
 
 	@Inject
 	private ControladorUsuario controladorPessoa;
-	
+
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
-		return null;
-//		String cpf = auth.getName();
-//		String senha = (String) auth.getCredentials();
-//
-//		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//		Usuario usuario = null;
-//		try {
-//			usuario = controladorPessoa.consultarUsuario(cpf);
-//		} catch (NoResultException e) {
-//			throw new BadCredentialsException("Usuário e/ou senha incorreta.");
-//		}
-//		if (usuario != null) {
-//			boolean senhaValidada = passwordEncoder.matches(senha, usuario.getSenha());
-//			if (senhaValidada) {
-//					List<GrantedAuthority> perfis = new ArrayList<GrantedAuthority>();
-//					perfis.add(new SimpleGrantedAuthority(usuario.getPerfil()));
-//					UsernamePasswordAuthenticationToken autenticacao = new UsernamePasswordAuthenticationToken(cpf, senha, perfis);
-//	
-//					UsuarioAutenticado usuarioAutenticado = UsuarioAutenticado.of(usuario);
-//	
-//					Map<String, UsuarioAutenticado> detalhes = new HashMap<String, UsuarioAutenticado>();
-//					detalhes.put("usuario", usuarioAutenticado);
-//					autenticacao.setDetails(detalhes);
-//	
-//					return autenticacao;
-//			} else {
-//				throw new BadCredentialsException("Usuário e/ou senha incorreta.");
-//			}
-//		} else {
-//			throw new BadCredentialsException("Usuário e/ou senha incorreta.");
-//		}
+		String login = auth.getName();
+		String senha = (String) auth.getCredentials();
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		Usuario usuario = null;
+		try {
+			usuario = controladorPessoa.consultarPorLogin(login);
+		} catch (NoResultException e) {
+			throw new BadCredentialsException("Usuário e/ou senha incorreta.");
+		}
+		if (usuario != null) {
+			boolean senhaValidada = passwordEncoder.matches(senha, usuario.getPass());
+			if (senhaValidada) {
+				List<GrantedAuthority> perfis = usuario.getPermissoes().stream()
+						.map(p -> new SimpleGrantedAuthority(p.toString())).collect(Collectors.toList());
+				UsernamePasswordAuthenticationToken autenticacao = new UsernamePasswordAuthenticationToken(login, senha, perfis);
+
+				UsuarioAutenticado usuarioAutenticado = UsuarioAutenticado.of(usuario);
+
+				Map<String, UsuarioAutenticado> detalhes = new HashMap<String, UsuarioAutenticado>();
+				detalhes.put("usuario", usuarioAutenticado);
+				autenticacao.setDetails(detalhes);
+
+				return autenticacao;
+			} else {
+				throw new BadCredentialsException("Usuário e/ou senha incorreta.");
+			}
+		} else {
+			throw new BadCredentialsException("Usuário e/ou senha incorreta.");
+		}
 	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

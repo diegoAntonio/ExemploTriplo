@@ -31,12 +31,34 @@
 			javax.enterprise.inject.spi.BeanManager
 		</resource-env-ref-type>
 	</resource-env-ref>
-    <!-- End Weld -->
-    
-    <!-- PrimeFaces Font Icons -->
-    <context-param>
-    	<param-name>primefaces.FONT_AWESOME</param-name>
-    	<param-value>true</param-value>
-    </context-param>
+	<!-- End Weld -->
 
+	<!-- PrimeFaces Font Icons -->
+	<context-param>
+		<param-name>primefaces.FONT_AWESOME</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+
+	<!-- Inicio Spring Security -->
+<!-- 	<context-param> -->
+<!--         <param-name>contextConfigLocation</param-name> -->
+<!--         <param-value> -->
+<!--             /WEB-INF/application-security.xml -->
+<!--         </param-value> -->
+<!--     </context-param> -->
+<!-- 	<listener> -->
+<!-- 	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> -->
+<!-- 	</listener> -->
+<!-- 	<filter> -->
+<!-- 		<filter-name>springSecurityFilterChain</filter-name> -->
+<!-- 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>springSecurityFilterChain</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
+	
+	<distributable />
+	
 </web-app>

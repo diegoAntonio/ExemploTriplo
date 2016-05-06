@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.slf4j.Logger;
+
 import br.ufpe.exemploprojeto.DAO.util.GenericDAO;
 import br.ufpe.exemploprojeto.annotation.Transacao;
 
@@ -25,6 +27,9 @@ public abstract class JPAGenericDAO<Chave, Entidade> implements GenericDAO<Chave
 
 	@Inject
 	protected EntityManager em;
+	
+	@Inject
+	protected Logger log;
 	
 
 	private Class<Entidade> entidadeClass;

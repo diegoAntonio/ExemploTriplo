@@ -22,7 +22,7 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import br.ufpe.exemploprojeto.model.util.AcaoEntidade;
-import br.ufpe.exemploprojeto.model.util.Entidade;
+import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
 import br.ufpe.exemploprojeto.model.util.Role;
 
 @Entity
@@ -30,7 +30,7 @@ import br.ufpe.exemploprojeto.model.util.Role;
 	   uniqueConstraints=@UniqueConstraint(columnNames={"id", "usuario_id","pessoa_usuario_id"}, name="unique_historico_usuario_usuario_pessoa")
 )
 @SequenceGenerator(name = "seq_historico_ususario", allocationSize = 1, sequenceName = "historico_usuario_id_seq")
-public class HistoricoUsuario implements Entidade<Long> {
+public class HistoricoUsuario implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = 8324816741279180157L;
 
 	@Id

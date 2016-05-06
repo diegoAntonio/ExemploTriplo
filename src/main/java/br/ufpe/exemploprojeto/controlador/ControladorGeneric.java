@@ -14,6 +14,7 @@ import br.ufpe.exemploprojeto.DAO.util.FactoryDAO;
 import br.ufpe.exemploprojeto.DAO.util.GenericDAO;
 import br.ufpe.exemploprojeto.annotation.Transacao;
 import br.ufpe.exemploprojeto.controlador.exception.ControladorException;
+import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
 
 @ApplicationScoped
 public abstract class ControladorGeneric<Chave, Entidade> implements Serializable {
@@ -38,6 +39,12 @@ public abstract class ControladorGeneric<Chave, Entidade> implements Serializabl
 		genericDAO = fabrica.factoryDao(entidadeClasse);
 	}
 	
+	/**
+	 * Metodo usado para inserir uma <Entidade>
+	 * Esse metodo eh transacional.
+	 * @param user - <Entidade>
+	 * @throws ControladorException - Erro ao inserir.
+	 */
 	@Transacao
 	public void inserir(Entidade user) throws ControladorException {
 		try {
@@ -48,6 +55,12 @@ public abstract class ControladorGeneric<Chave, Entidade> implements Serializabl
 		}
 	}
 
+	/**
+	 * Metodo usado para alterar uma <Entidade>
+	 * Esse metodo eh transacional.
+	 * @param user - <Entidade>
+	 * @throws ControladorException - Erro ao alterar.
+	 */
 	@Transacao
 	public Entidade alterar(Entidade user) throws ControladorException {
 		Entidade retorno = null;
@@ -60,6 +73,7 @@ public abstract class ControladorGeneric<Chave, Entidade> implements Serializabl
 		return retorno;
 	}
 
+	
 	public Entidade buscarPorId(Chave id) {
 		Entidade retorno = null;
 		try {
@@ -70,6 +84,12 @@ public abstract class ControladorGeneric<Chave, Entidade> implements Serializabl
 		return retorno;
 	}
 
+	/**
+	 * Metodo usado para remover uma <Entidade>
+	 * Esse metodo eh transacional.
+	 * @param user - <Entidade>
+	 * @throws ControladorException - Erro ao remover.
+	 */
 	@Transacao
 	public void remover(Entidade user) throws ControladorException {
 		try {

@@ -16,14 +16,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import br.ufpe.exemploprojeto.model.util.Endereco;
-import br.ufpe.exemploprojeto.model.util.Entidade;
+import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
 
 @Entity
 @Table(name="pessoa")
 @SequenceGenerator(name="seq_pessoa", allocationSize=1, sequenceName="pessoa_id_seq")
-public class Pessoa implements Entidade<Long> {
+public class Pessoa implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = -3093038371722387304L;
 
 	@Id
@@ -32,7 +33,7 @@ public class Pessoa implements Entidade<Long> {
 	
 	private String nome;
 	
-	@Column(length=11, unique=true)
+	@Column(length=11,nullable=false, unique=true)
 	private String cpf;
 	
 	@Embedded

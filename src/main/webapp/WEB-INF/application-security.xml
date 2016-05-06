@@ -14,16 +14,20 @@
 	<context:annotation-config />
 
     <sec:http auto-config="true" use-expressions="true">
-        <sec:intercept-url pattern="/index.xhtml" access="hasAnyRole('ROLE_APOIO', 'ROLE_ADMIN')" />
-        <sec:intercept-url pattern="/admin/**"  access="hasRole('ROLE_ADMIN')" />
-        <sec:intercept-url pattern="/registrar-comparecimento/**" access="hasAnyRole('ROLE_APOIO', 'ROLE_ADMIN')" />
-        <sec:intercept-url pattern="/painel-comparecimento/**" access="hasAnyRole('ROLE_APOIO', 'ROLE_ADMIN')" />
-        <sec:intercept-url pattern="/alterar-senha/**" access="hasAnyRole('ROLE_APOIO', 'ROLE_ADMIN')" />
+        <sec:intercept-url pattern="/index.xhtml" access="authenticated" />
+<!--         <sec:intercept-url pattern="/admin/**"  access="hasRole('ROLE_ADMIN')" /> -->
+<!--         <sec:intercept-url pattern="/registrar-comparecimento/**" access="hasAnyRole('ROLE_APOIO', 'ROLE_ADMIN')" /> -->
+<!--         <sec:intercept-url pattern="/painel-comparecimento/**" access="hasAnyRole('ROLE_APOIO', 'ROLE_ADMIN')" /> -->
+<!--         <sec:intercept-url pattern="/alterar-senha/**" access="hasAnyRole('ROLE_APOIO', 'ROLE_ADMIN')" /> -->
 
-        <sec:access-denied-handler error-page="/erro-404.xhtml" />
+        <sec:access-denied-handler error-page="/error-404.xhtml" />
 
-        <sec:form-login login-page="/login.xhtml" authentication-failure-url="/login.xhtml" />
-        <sec:logout invalidate-session="true" delete-cookies="true" logout-success-url="/login.xhtml" />
+        <sec:form-login login-page="/login.xhtml"
+        				authentication-failure-url="/login.xhtml"
+        				default-target-url="/index.xhtml" />
+        <sec:logout invalidate-session="true"
+        			delete-cookies="true"
+        			logout-success-url="/login.xhtml" />
     </sec:http>
 
     <sec:authentication-manager>
@@ -34,10 +38,7 @@
     	<beans:property name="basename" value="classpath:org/springframework/security/messages_pt_BR"/>  
 	</beans:bean>
 
-	<beans:bean id="provedorAutenticacao" class="sisu.util.ProvedorAutenticacao" />
-	<beans:bean id="controladorUsuario" class="sisu.controlador.ControladorUsuario" autowire="byType"/>
-	<beans:bean id="controladorHistoricoUsuario" class="sisu.controlador.ControladorHistoricoUsuario" autowire="byType"/>
-	<beans:bean id="JPAUsuarioDAO" class="sisu.repositorio.jpa.JPAUsuarioDAO" autowire="byType"/>
-	<beans:bean id="JPAHistoricoUsuarioDAO" class="sisu.repositorio.jpa.JPAHistoricoUsuarioDAO" autowire="byType"/>
-
+	<beans:bean id="provedorAutenticacao" class="br.ufpe.exemploprojeto.security.AutenticatorProviderExemplo" />
+	<beans:bean id="controladorUsuario" class="br.ufpe.exemploprojeto.controlador.ControladorUsuario" autowire="byType"/>
+	<beans:bean id="JPAUsuarioDAO" class="br.ufpe.exemploprojeto.DAO.jpa.JPAUsuarioDAO" autowire="byType"/>
 </beans:beans>
