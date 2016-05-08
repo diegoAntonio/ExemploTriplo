@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -45,9 +44,10 @@ public class HistoricoUsuario implements EntidadePadrao<Long> {
 	private String pass;
 
 
-	@ManyToMany(fetch=FetchType.EAGER, targetEntity=Role.class, cascade=CascadeType.ALL)
-	@JoinTable(name="role_historico",joinColumns=@JoinColumn(referencedColumnName="historico_id"),
-	inverseJoinColumns=@JoinColumn(referencedColumnName="role_id"))
+	@ManyToMany(fetch=FetchType.EAGER, targetEntity = Role.class)
+	@JoinTable(name="auth_role_historico",
+			   joinColumns=@JoinColumn(name="historico_usuario_id", referencedColumnName="id"),
+			   inverseJoinColumns=@JoinColumn(name="auth_role_id", referencedColumnName="id"))
 	private List<Role> permissoes;
 
 	@Column(name="usuario_id")

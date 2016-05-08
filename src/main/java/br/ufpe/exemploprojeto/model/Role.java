@@ -15,13 +15,13 @@ import javax.persistence.UniqueConstraint;
 import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
 
 @Entity
-@Table(name="role", uniqueConstraints=@UniqueConstraint(name="unique_nome",columnNames={"nome"}))
-@SequenceGenerator(name="seq_role", allocationSize=1,sequenceName="role_id_seq")
+@Table(name="auth_role", uniqueConstraints=@UniqueConstraint(name="unique_nome",columnNames={"nome"}))
+@SequenceGenerator(name="seq_auth_role", allocationSize=1,sequenceName="auth_role_id_seq")
 public class Role implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = 6018708163045427529L;
 	
 	@Id
-	@GeneratedValue(generator="seq_role",strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator="seq_auth_role",strategy=GenerationType.SEQUENCE)
 	private Long id;
 
 	private String nome;
@@ -37,9 +37,8 @@ public class Role implements EntidadePadrao<Long> {
 		return role;
 	}
 	
-	public static Role of(Long id, String nome, int nivel) {
+	public static Role of(String nome, int nivel) {
 		Role role = new Role();
-		role.id = id;
 		role.nome = nome;
 		role.nivel = nivel;
 		role.timestamp = new Date();
@@ -72,6 +71,14 @@ public class Role implements EntidadePadrao<Long> {
 		this.nivel = nivel;
 	}
 
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -96,7 +103,4 @@ public class Role implements EntidadePadrao<Long> {
 			return false;
 		return true;
 	}
-	
-	
-
 }

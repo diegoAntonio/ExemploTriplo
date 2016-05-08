@@ -5,9 +5,11 @@
 
 	<persistence-unit name="bancoNormal">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>br.ufpe.exemploprojeto.model.Livro</class>
 		<class>br.ufpe.exemploprojeto.model.Usuario</class>
-		<class>br.ufpe.exemploporjeto.model.Livro</class>
-		<class>br.ufpe.exemploporjeto.model.HistoricoUsuario</class>
+		<class>br.ufpe.exemploprojeto.model.HistoricoUsuario</class>
+		<class>br.ufpe.exemploprojeto.model.Pessoa</class>
+		<class>br.ufpe.exemploprojeto.model.Role</class>
 		
 
 		<properties>
@@ -27,9 +29,11 @@
 
 	<persistence-unit name="bancoTeste">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>br.ufpe.exemploprojeto.model.Livro</class>
 		<class>br.ufpe.exemploprojeto.model.Usuario</class>
-		<class>br.ufpe.exemploporjeto.model.Livro</class>
-		<class>br.ufpe.exemploporjeto.model.HistoricoUsuario</class>
+		<class>br.ufpe.exemploprojeto.model.HistoricoUsuario</class>
+		<class>br.ufpe.exemploprojeto.model.Pessoa</class>
+		<class>br.ufpe.exemploprojeto.model.Role</class>
 		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="${jdbc.driver}" />

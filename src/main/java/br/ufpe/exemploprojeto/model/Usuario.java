@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -21,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
+
 
 @Entity
 @Table(name = "usuario")
@@ -44,9 +44,10 @@ public class Usuario implements EntidadePadrao<Long> {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 
-	@ManyToMany(fetch=FetchType.EAGER, targetEntity=Role.class, cascade=CascadeType.ALL)
-	@JoinTable(name="role_usuario",joinColumns=@JoinColumn(referencedColumnName="usuario_id"),
-	inverseJoinColumns=@JoinColumn(referencedColumnName="role_id"))
+	@ManyToMany(fetch=FetchType.EAGER, targetEntity = Role.class)
+	@JoinTable(name="auth_role_usuario",
+			   joinColumns=@JoinColumn(name="usuario_id", referencedColumnName="id"),
+			   inverseJoinColumns=@JoinColumn(name="auth_role_id", referencedColumnName="id"))
 	private List<Role> permissoes;
 
 	public Usuario() {

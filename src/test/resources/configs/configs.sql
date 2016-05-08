@@ -1,9 +1,10 @@
-DROP TABLE IF EXIST role_usuario;
-DROP TABLE IF EXIST role_historico;
-DROP TABLE IF EXIST usuario;
-DROP TABLE IF EXIST livro;
-DROP TABLE IF EXIST historico_usuario;
-DROP TABLE IF EXIST pessoa;
+DROP TABLE IF EXISTS auth_role_usuario;
+DROP TABLE IF EXISTS auth_role_historico;
+DROP TABLE IF EXISTS auth_role;
+DROP TABLE IF EXISTS usuario;
+DROP TABLE IF EXISTS livro;
+DROP TABLE IF EXISTS historico_usuario;
+DROP TABLE IF EXISTS pessoa;
 
 CREATE TABLE pessoa
 (
@@ -60,25 +61,47 @@ CREATE TABLE usuario
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-CREATE TABLE role_historico
+CREATE TABLE auth_role
 (
-  historicousuario_id bigint NOT NULL,
-  role character varying(255),
-  CONSTRAINT fk_historico_usuario_role FOREIGN KEY (historicousuario_id)
+  id bigint NOT NULL,
+  nivel integer NOT NULL,
+  nome character varying(255),
+  "timestamp" timestamp without time zone,
+  CONSTRAINT auth_role_pkey PRIMARY KEY (id),
+  CONSTRAINT unique_nome UNIQUE (nome)
+);
+
+CREATE TABLE auth_role_historico
+(
+  historico_usuario_id bigint NOT NULL,
+  auth_role_id bigint NOT NULL,
+  CONSTRAINT fk_auth_role_historico_historico_usuario_id FOREIGN KEY (historico_usuario_id)
       REFERENCES historico_usuario (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_auth_role_historico_auth_role_id FOREIGN KEY (auth_role_id)
+      REFERENCES auth_role (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-CREATE TABLE role_usuario
+CREATE TABLE auth_role_usuario
 (
   usuario_id bigint NOT NULL,
-  role character varying(255),
-  CONSTRAINT fk_usuario_role FOREIGN KEY (usuario_id)
+  auth_role_id bigint NOT NULL,
+  CONSTRAINT fk_auth_role_usuario_auth_role_id FOREIGN KEY (auth_role_id)
+      REFERENCES auth_role (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_auth_role_usuario_usuario_id FOREIGN KEY (usuario_id)
       REFERENCES usuario (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
+INSERT INTO auth_role(id, nome, nivel, "timestamp") VALUES (1, 'ADMIN', 1, now()),
+(2, 'MODERADOR', 2, now()),(3, 'COLABORADOR', 3, now()),(4, 'USER', 100, now());
 
+INSERT INTO pessoa(id, cpf, dtnascimento, bairro, cep, cidade, complemento, numero, rua, nome, "timestamp") VALUES
+(nextval ('pessoa_id_seq'),'12345678909', to_date('04/10/1989','dd/MM/YYYY'),'Nossa Senhora do O',
+'53431265','Paulista', 'Casa',140,'Rua Barra Longa','Andre Alcantara', now());		
+INSERT INTO usuario(id, login, pass, "timestamp", pessoa_id ) VALUES(nextval('usuario_id_seq'), 'admin', '$2a$10$IBctXSUwEGeZk9fbvWCmBuIyT68dxwrRjUGfW6vXGtG7r1F/vdNUS', now(), currval('pessoa_id_seq'));
 
-
+INSERT INTO auth_role_usuario(usuario_id, auth_role_id) values(currval('usuario_id_seq'), 1);

@@ -55,7 +55,10 @@ dependencies {
   compile 'org.jboss.weld:weld-core:2.3.1.Final'
   
   // Tomcat Lib
-  compile 'org.apache.tomcat:tomcat-servlet-api:8.0.28'  
+  compile 'org.apache.tomcat:tomcat-servlet-api:8.0.28'
+  
+  
+  compile 'jstl:jstl:1.2'
 
   // Junit
   testCompile 'junit:junit:4.12'

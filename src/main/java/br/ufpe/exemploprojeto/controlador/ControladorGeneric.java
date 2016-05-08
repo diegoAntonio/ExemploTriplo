@@ -14,7 +14,6 @@ import br.ufpe.exemploprojeto.DAO.util.FactoryDAO;
 import br.ufpe.exemploprojeto.DAO.util.GenericDAO;
 import br.ufpe.exemploprojeto.annotation.Transacao;
 import br.ufpe.exemploprojeto.controlador.exception.ControladorException;
-import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
 
 @ApplicationScoped
 public abstract class ControladorGeneric<Chave, Entidade> implements Serializable {
