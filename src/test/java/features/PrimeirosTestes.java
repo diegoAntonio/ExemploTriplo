@@ -107,8 +107,8 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		usuarioDAO.save(u);
 		HistoricoUsuario hu = HistoricoUsuario.of(u, AcaoEntidade.CREATE);
 		historicoUsuarioDAO.save(hu);
-		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(1));
-		Assert.assertThat(historicoUsuarioDAO.findAll().size(), CoreMatchers.is(1));
+		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(2));
+		Assert.assertThat(historicoUsuarioDAO.findAll().size(), CoreMatchers.is(2));
 	}
 	
 	@Test
@@ -116,7 +116,7 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		int count = quantidadeHistorico();
 		List<HistoricoUsuario> listUser = historicoUsuarioDAO.findAll();
 		System.out.println(listUser);
-		Assert.assertThat(listUser.size(), CoreMatchers.is(count));
+		Assert.assertThat(listUser.size(), CoreMatchers.is(count+1));
 	}
 	
 	public int quantidadeHistorico() throws ControladorException{

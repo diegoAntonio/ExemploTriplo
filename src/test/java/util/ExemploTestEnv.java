@@ -1,14 +1,23 @@
 package util;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.ibatis.jdbc.ScriptRunner;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.jglue.cdiunit.ActivatedAlternatives;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.AdditionalPackages;
@@ -76,13 +85,19 @@ public abstract class ExemploTestEnv implements Serializable{
 	
 	private void resetBanco() {
 		EManager.getTransaction().begin();
-		StringBuilder sb = new StringBuilder();
-		new BufferedReader(new InputStreamReader(ExemploTestEnv.class.getResourceAsStream("/configs/configs.sql"), Charset.forName("ISO-8859-1"))).lines().forEach(sb::append);
-		Arrays.stream(sb.toString().split(";")).forEach( l -> {
-			String line = l.replace("\"", "\\\"");
-			line = "{call BEGIN " + line.trim() + " END}";
-			System.out.println(line);
-			EManager.createNativeQuery(line);
+
+		((Session)EManager.unwrap(Session.class)).doWork(new Work() {
+			@Override
+			public void execute(Connection connection) throws SQLException {
+				ScriptRunner sr = new ScriptRunner(connection);
+				PrintWriter pw = new PrintWriter(new ByteArrayOutputStream());
+				sr.setLogWriter(null);
+				StringBuilder sb = new StringBuilder();
+				new BufferedReader(new InputStreamReader(ExemploTestEnv.class.getResourceAsStream("/configs/configs.sql"), Charset.forName("ISO-8859-1"))).lines().forEach(sb::append);
+				Arrays.stream(sb.toString().split(";")).forEach( l -> {
+					sr.runScript(new StringReader(l+";"));
+				});				
+			}
 		});
 		
 		EManager.getTransaction().commit();
