@@ -6,6 +6,49 @@ DROP TABLE IF EXISTS livro;
 DROP TABLE IF EXISTS historico_usuario;
 DROP TABLE IF EXISTS pessoa;
 
+DROP SEQUENCE IF EXISTS auth_role_id_seq;
+DROP SEQUENCE IF EXISTS historico_usuario_id_seq;
+DROP SEQUENCE IF EXISTS livro_id_seq;
+DROP SEQUENCE IF EXISTS pessoa_id_seq;
+DROP SEQUENCE IF EXISTS usuario_id_seq;
+
+
+
+CREATE SEQUENCE auth_role_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+CREATE SEQUENCE historico_usuario_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+CREATE SEQUENCE livro_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+CREATE SEQUENCE pessoa_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+  
+CREATE SEQUENCE usuario_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
 CREATE TABLE pessoa
 (
   id bigint NOT NULL,
@@ -104,4 +147,9 @@ INSERT INTO pessoa(id, cpf, dtnascimento, bairro, cep, cidade, complemento, nume
 '53431265','Paulista', 'Casa',140,'Rua Barra Longa','Andre Alcantara', now());		
 INSERT INTO usuario(id, login, pass, "timestamp", pessoa_id ) VALUES(nextval('usuario_id_seq'), 'admin', '$2a$10$IBctXSUwEGeZk9fbvWCmBuIyT68dxwrRjUGfW6vXGtG7r1F/vdNUS', now(), currval('pessoa_id_seq'));
 
-INSERT INTO auth_role_usuario(usuario_id, auth_role_id) values(currval('usuario_id_seq'), 1);
+INSERT INTO auth_role_usuario(usuario_id, auth_role_id) VALUES(currval('usuario_id_seq'), 1);
+
+INSERT INTO historico_usuario(id, acao, login, pass, "timestamp", pessoa_usuario_id, usuario_id)
+VALUES (nextval('historico_usuario_id_seq'), 'CREATE', 'admin', '$2a$10$IBctXSUwEGeZk9fbvWCmBuIyT68dxwrRjUGfW6vXGtG7r1F/vdNUS', now(), currval('pessoa_id_seq'), currval('usuario_id_seq'));
+
+INSERT INTO auth_role_historico (historico_usuario_id, auth_role_id) VALUES(currval('historico_usuario_id_seq'), 1);

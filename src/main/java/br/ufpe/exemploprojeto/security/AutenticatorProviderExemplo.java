@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,21 +19,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import br.ufpe.exemploprojeto.controlador.ControladorUsuario;
 import br.ufpe.exemploprojeto.model.Usuario;
 import br.ufpe.exemploprojeto.security.util.UsuarioAutenticado;
+import br.ufpe.exemploprojeto.util.Produtor;
 
 public class AutenticatorProviderExemplo implements AuthenticationProvider {
 
-	@Inject
-	private ControladorUsuario controladorPessoa;
+	private ControladorUsuario controladorUsuario;
 
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
+		controladorUsuario = Produtor.staticClassCDI(ControladorUsuario.class);
 		String login = auth.getName();
 		String senha = (String) auth.getCredentials();
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		Usuario usuario = null;
 		try {
-			usuario = controladorPessoa.consultarPorLogin(login);
+			usuario = controladorUsuario.consultarPorLogin(login);
 		} catch (NoResultException e) {
 			throw new BadCredentialsException("Usuário e/ou senha incorreta.");
 		}
@@ -62,7 +62,7 @@ public class AutenticatorProviderExemplo implements AuthenticationProvider {
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		return false;
+		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 
 }

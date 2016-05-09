@@ -7,12 +7,13 @@ import java.util.Properties;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.CDI;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import br.ufpe.exemploprojeto.util.Produtor;
 
 /**
  * Classe auxiliar do JPA para criacao de {@link EntityManager} e {@link EntityManagerFactory}
@@ -37,7 +38,7 @@ public class JPAUtil implements Serializable{
 	 * @return - {@link EntityManager}
 	 */
 	public static EntityManager staticEntityManage(){
-		 return JPAUtil.staticClassCDI(EntityManager.class);
+		 return Produtor.staticClassCDI(EntityManager.class);
 	}
 	
 	/**
@@ -46,7 +47,7 @@ public class JPAUtil implements Serializable{
 	 * @return - {@link EntityManagerFactory}
 	 */
 	public static EntityManagerFactory staticEntityManageFactory(){
-		 return JPAUtil.staticClassCDI(EntityManagerFactory.class);
+		 return Produtor.staticClassCDI(EntityManagerFactory.class);
 	}
 	
 	/**
@@ -102,10 +103,5 @@ public class JPAUtil implements Serializable{
 		if(emfactory != null && emfactory.isOpen()) {
 			emfactory.close();
 		}
-	}
-	
-	private static <T> T staticClassCDI(Class<T> clazz){
-		 Instance<T> instance = CDI.current().select(clazz);
-		    return instance.get();
 	}
 }

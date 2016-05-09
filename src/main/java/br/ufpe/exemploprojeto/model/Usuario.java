@@ -25,7 +25,6 @@ import br.ufpe.exemploprojeto.model.util.EntidadePadrao;
 @Entity
 @Table(name = "usuario")
 @SequenceGenerator(name = "seq_usuario", sequenceName = "usuario_id_seq", allocationSize = 1)
-//TODO: resolver problema de conflito ManyToMany
 public class Usuario implements EntidadePadrao<Long> {
 	private static final long serialVersionUID = 1079619057493715949L;
 

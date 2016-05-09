@@ -80,8 +80,8 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		Usuario u = get_usuario();
 		pessoaDAO.save(u.getPessoa());
 		usuarioDAO.save(u);
-		Assert.assertTrue(usuarioDAO.findAll().size() == 1);
-		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(1));
+		Assert.assertTrue(usuarioDAO.findAll().size() == 2);
+		Assert.assertThat(usuarioDAO.findAll().size(), CoreMatchers.is(2));
 	}
 
 	@Test
@@ -96,7 +96,8 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		Usuario u = get_usuario();
 		controladorUsuario.inserir(u);
 		int size = historicoUsuarioDAO.findAll().size();
-		Assert.assertThat(size, CoreMatchers.is(1));
+		// Menos 1 do ja existente.
+		Assert.assertThat(size-1, CoreMatchers.is(1));
 	}
 
 	@Test
@@ -143,7 +144,7 @@ public class PrimeirosTestes extends ExemploTestEnv {
 		return count;
 	}
 	
-	@Before
+//	@Before
 	public void beforeClass(){
 		if(!EManager.getTransaction().isActive())
 			EManager.getTransaction().begin();
@@ -160,13 +161,11 @@ public class PrimeirosTestes extends ExemploTestEnv {
 	
 	public Usuario get_usuario(){
 		Role role = EManager.find(Role.class, 1l);
-		
-		Endereco end = Endereco.of("Rua dos bobos", 0, null, "Lembra que a casa", "nao tinha nada", "Nem teto.");
-		Pessoa p = Pessoa.of("Andre Alcantara", "11111111111", end, new Date(LocalDate.of(1989, 10, 4).toEpochDay()));
+		Endereco end = Endereco.of("Lorem ipsum dolor sit amet", 0, "hendrerit placerat", "consectetur adipiscing elit.", "Arcu maximus congue. Nullam", "Morbi sollicitudin odio non");
+		Pessoa p = Pessoa.of("Admin 2", "11111111111", end, new Date(LocalDate.of(1989, 10, 4).toEpochDay()));
 		BCryptPasswordEncoder password = new BCryptPasswordEncoder();
 		String senha = password.encode("12345678909");
 		Usuario u = Usuario.of("andre.alcantara", senha, p, Arrays.asList(role));
-		
 		return u;
 	}
 

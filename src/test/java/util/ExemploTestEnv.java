@@ -1,5 +1,10 @@
 package util;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -71,21 +76,17 @@ public abstract class ExemploTestEnv implements Serializable{
 	
 	private void resetBanco() {
 		EManager.getTransaction().begin();
-		EManager.createNativeQuery("delete from auth_role_usuario;").executeUpdate(); 
-		EManager.createNativeQuery("delete from auth_role_historico;").executeUpdate(); 
-		EManager.createNativeQuery("delete from auth_role;").executeUpdate(); 
+		StringBuilder sb = new StringBuilder();
+		new BufferedReader(new InputStreamReader(ExemploTestEnv.class.getResourceAsStream("/configs/configs.sql"), Charset.forName("ISO-8859-1"))).lines().forEach(sb::append);
+		Arrays.stream(sb.toString().split(";")).forEach( l -> {
+			String line = l.replace("\"", "\\\"");
+			line = "{call BEGIN " + line.trim() + " END}";
+			System.out.println(line);
+			EManager.createNativeQuery(line);
+		});
 		
-		EManager.createNativeQuery("delete from historico_usuario;").executeUpdate();
-		EManager.createNativeQuery("delete from usuario;").executeUpdate();
-		EManager.createNativeQuery("delete from pessoa;").executeUpdate();
-		EManager.createNativeQuery("delete from livro;").executeUpdate();
-		
-		EManager.createNativeQuery("ALTER SEQUENCE auth_role_id_seq RESTART WITH 1;").executeUpdate();
-		EManager.createNativeQuery("ALTER SEQUENCE livro_id_seq RESTART WITH 1;").executeUpdate();
-		EManager.createNativeQuery("ALTER SEQUENCE usuario_id_seq RESTART WITH 1;").executeUpdate();
-		EManager.createNativeQuery("ALTER SEQUENCE pessoa_id_seq RESTART WITH 1;").executeUpdate();
-		EManager.createNativeQuery("ALTER SEQUENCE historico_usuario_id_seq RESTART WITH 1;").executeUpdate();
 		EManager.getTransaction().commit();
+		
 		this.novaRequest();
 	}
 	
