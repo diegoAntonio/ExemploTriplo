@@ -80,12 +80,12 @@ eclipse{
     // containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     downloadSources = true
   }
-  //wtp {
-  //	component {
-  //		resource sourcePath: '/src/test/java', deployPath: 'WEB-INF/classes/target-test'
-  //		resource sourcePath: '/src/test/resources', deployPath: 'WEB-INF/classes/target-test'
-  //	}
-  //}
+  wtp {
+  	component {
+  		resource sourcePath: '/src/test/java', deployPath: 'WEB-INF/classes/target-test'
+  		resource sourcePath: '/src/test/resources', deployPath: 'WEB-INF/classes/target-test'
+  	}
+  }
 
 }
 
