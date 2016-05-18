@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling()
 				.and()
 			.authorizeRequests()
-				.antMatchers("/javax.faces.resource/**")
+				.antMatchers("/resource/**")
 				.permitAll().anyRequest().authenticated()
 				.and()
 			.authorizeRequests()
@@ -45,6 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //				.and()
 //			.formLogin().permitAll()
 			;
+	}
+	
+	private void configurarResources(HttpSecurity http) throws Exception {
 		
 	}
+	
 }	
