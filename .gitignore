@@ -17,3 +17,4 @@ build
 *.orig
 *.directory
 *.~lock*
+*.old

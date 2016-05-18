@@ -7,4 +7,7 @@
                 	br.ufpe.exemploprojeto.annotation.interceptador.TransacaoInterceptor
                 </class>
         </interceptors>
+        <alternatives>
+    		<stereotype>annotationTest.AlternativeTest</stereotype>
+ 	    </alternatives>
 </beans>
