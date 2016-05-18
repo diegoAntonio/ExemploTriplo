@@ -80,6 +80,12 @@ eclipse{
     // containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     downloadSources = true
   }
+  //wtp {
+  //	component {
+  //		resource sourcePath: '/src/test/java', deployPath: 'WEB-INF/classes/target-test'
+  //		resource sourcePath: '/src/test/resources', deployPath: 'WEB-INF/classes/target-test'
+  //	}
+  //}
 
 }
 
@@ -98,6 +104,8 @@ eclipse.classpath.file {
   withXml { xml ->
       def node = xml.asNode()
       node.remove( node.find { it.@path == 'org.eclipse.jst.j2ee.internal.web.container' } )
+      node.remove( node.find { it.@path == 'src/test/java' } )
+      node.remove( node.find { it.@path == 'src/test/resources' } )
       node.appendNode( 'classpathentry', [ kind: 'src', path: 'src/test/java',      output: 'binTest'])
       node.appendNode( 'classpathentry', [ kind: 'src', path: 'src/test/resources', output: 'binTest'])
       node.appendNode( 'classpathentry', [ kind: 'con', path: 'org.eclipse.jst.j2ee.internal.web.container', exported: 'true'])
