@@ -1,5 +1,6 @@
 # Project configuration
 /bin
+/binTest
 build
 .project
 .gradle
