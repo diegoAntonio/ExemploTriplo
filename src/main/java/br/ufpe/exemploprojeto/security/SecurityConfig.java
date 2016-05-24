@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	/**
-	 * Metodo que define os recursos utilizado nas paginas.
+	 * Metodo que define os recursos utilizado nas pagicd nas.
 	 * 
 	 * @param http - {@link HttpSecurity} eh o objeto que sera mapeado as rotas.
 	 * @return {@link HttpSecurity} retorno atualizado.
